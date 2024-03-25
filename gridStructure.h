@@ -28,8 +28,12 @@ void generateRandomIndex(int* array);
 
 int createGrid();
 
+//TODO: Check for edge-cases where a destination is boxed in. 
 int createConstruction();
 
 Cell* createPassenger();
 
 Cell* createDestination();
+
+//TODO: Create a passenger pickup function which frees the pointer to the passenger.
+//TODO: Create a clear destination function which frees the pointer to the destination
