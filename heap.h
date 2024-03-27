@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define HEAP_SIZE 70; //size = grid size - construction points,
+#define HEAP_CAPACITY 70; //size = grid size - construction points,
 
 //min Heap implementation
 
@@ -14,13 +14,12 @@ right_child(i) = 2*i + 2
 
 typedef struct heap
 {
-    int *arr;
+    int arr[70];
     int size;
-    int capacity;
 } Heap;
 
 //Creates a heap and returns the pointer to the heap structure. 
-Heap* createHeap(int capacity, int* nums);
+Heap* createHeap(int* nums);
 
 //Pop the min value from the heap
 int popHeap(Heap* h);
