@@ -1,4 +1,6 @@
 *.exe
 .vscode/
-CMakeList.txt
+CMakeLists.txt
 /target
+.idea/
+cmake-build-debug/
