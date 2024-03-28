@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "gridStructure.h"
 
 //general process of the astar algorithm
 /*
@@ -37,16 +36,3 @@
   
     e) push q on the closed list
     end (while loop)*/
-
-    void aStarSearch();
-
-    //we will use a diagonal distance heuristic.
-    double calculateHeuristic(int row, int col, Cell* pass);
-
-    void tracePath();
-
-    int isValid();
-
-    int isUnBlocked();
-
-    int isDestination(int row, int col, Cell* pass);
