@@ -52,3 +52,44 @@ void heapify(Heap *h, int index) {
         // to maintain min heap
         heapify(h, min);
 }
+}
+
+void insertHelper(Heap* h, int child) {
+    int parent = (child - 1) / 2 ;
+
+    if (h -> arr[parent] > h -> arr[child]) {
+        //swap if child is smaller than parent
+        int temp = h->arr[child];
+        h->arr[parent] = h->arr[child];
+        h -> arr[child] = temp;
+
+        insertHelper(h, parent);
+    }
+}
+
+int popHeap(Heap* h) {
+    int poppedItem;
+
+    if (h -> size == 0) {
+        printf("\nHeap is empty");
+        return -1;
+    }
+    //store popped item
+    poppedItem = h->arr[0];
+
+    //swap popped item with the last node
+    h->arr[0] = h -> arr[h -> size - 1];
+    h -> size--;
+
+    heapify(h,0);
+    return poppedItem;
+}
+
+void pushHeap(Heap* h, int data) {
+    if (h -> size < HEAP_CAPACITY) {
+        h -> arr[h -> size] = data;
+
+        insertHelper(h, h->size);
+        h -> size++;
+    }
+}
