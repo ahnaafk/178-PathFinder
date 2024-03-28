@@ -22,18 +22,18 @@ typedef struct cell
     struct cell* destination;
 } Cell;
 
-Cell grid[GRID_SIZE][GRID_SIZE];
 
-void generateRandomIndex(int* array);
 
-int createGrid();
+void generateRandomIndex(int* array, Cell grid[GRID_SIZE][GRID_SIZE]);
+
+void createGrid(Cell grid[GRID_SIZE][GRID_SIZE]);
 
 //TODO: Check for edge-cases where a destination is boxed in. 
-int createConstruction();
+int createConstruction(Cell grid[GRID_SIZE][GRID_SIZE]);
 
-Cell* createPassenger();
+Cell* createPassenger(Cell grid[GRID_SIZE][GRID_SIZE]);
 
-Cell* createDestination();
+Cell* createDestination(Cell grid[GRID_SIZE][GRID_SIZE]);
 
 //TODO: Create a passenger pickup function which frees the pointer to the passenger.
 //TODO: Create a clear destination function which frees the pointer to the destination
