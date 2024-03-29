@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #define GRID_SIZE 10 
 
 //cellData indices. 
@@ -20,20 +21,21 @@ typedef struct cell
     //[3]: 1 if destination, 0 if not. 
     struct cell* passenger;
     struct cell* destination;
+    struct cell* parent;
 } Cell;
 
 
 
-void generateRandomIndex(int* array, Cell grid[GRID_SIZE][GRID_SIZE]);
+void generateRandomIndex(int* array, Cell* grid[GRID_SIZE][GRID_SIZE]);
 
-void createGrid(Cell grid[GRID_SIZE][GRID_SIZE]);
+void createGrid(Cell* grid[GRID_SIZE][GRID_SIZE]);
 
 //TODO: Check for edge-cases where a destination is boxed in. 
-int createConstruction(Cell grid[GRID_SIZE][GRID_SIZE]);
+int createConstruction(Cell* grid[GRID_SIZE][GRID_SIZE]);
 
-Cell* createPassenger(Cell grid[GRID_SIZE][GRID_SIZE]);
+Cell* createPassenger(Cell* grid[GRID_SIZE][GRID_SIZE]);
 
-Cell* createDestination(Cell grid[GRID_SIZE][GRID_SIZE]);
+Cell* createDestination(Cell* grid[GRID_SIZE][GRID_SIZE]);
 
 //TODO: Create a passenger pickup function which frees the pointer to the passenger.
 //TODO: Create a clear destination function which frees the pointer to the destination

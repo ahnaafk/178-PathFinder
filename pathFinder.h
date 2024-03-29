@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "heap.h"
 
 //general process of the astar algorithm
 /*
