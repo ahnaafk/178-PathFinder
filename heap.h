@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "gridStructure.h"
 
 #define HEAP_CAPACITY 70 //size = grid size - construction points,
 
