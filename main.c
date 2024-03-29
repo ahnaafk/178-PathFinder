@@ -40,17 +40,9 @@ int main()
     srand(time(NULL));
 
     Cell *grid[GRID_SIZE][GRID_SIZE];
-
-    for (int i = 0; i < GRID_SIZE; i++)
-    {
-        for (int j = 0; j < GRID_SIZE; j++)
-        {
-            Cell *temp = malloc(sizeof(Cell *));
-            grid[i][j] = temp;
-        }
-    }
+    
     createGrid(grid);
-    printGrid(grid);
+    // printGrid(grid);
     printCell(grid);
 
         for (int i = 0; i < GRID_SIZE; i++)
