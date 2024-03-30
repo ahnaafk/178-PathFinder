@@ -22,6 +22,9 @@ typedef struct cell
     struct cell* passenger;
     struct cell* destination;
     struct cell* parent;
+    int f_cost;
+    int g_cost;
+    int h_cost;
 } Cell;
 
 
@@ -29,6 +32,11 @@ typedef struct cell
 void generateRandomIndex(int* array, Cell* grid[GRID_SIZE][GRID_SIZE]);
 
 void createGrid(Cell* grid[GRID_SIZE][GRID_SIZE]);
+
+//helper debug functions
+void printGrid(Cell *grid[GRID_SIZE][GRID_SIZE]);
+
+void printCell(Cell *grid[GRID_SIZE][GRID_SIZE]);
 
 //TODO: Check for edge-cases where a destination is boxed in. 
 int createConstruction(Cell* grid[GRID_SIZE][GRID_SIZE]);
