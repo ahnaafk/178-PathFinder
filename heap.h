@@ -15,7 +15,7 @@ right_child(i) = 2*i + 2
 
 typedef struct heap
 {
-    int arr[HEAP_CAPACITY];
+    Cell* arr[HEAP_CAPACITY];
     int size;
 } Heap;
 
