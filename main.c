@@ -12,8 +12,9 @@ int main()
     Cell *grid[GRID_SIZE][GRID_SIZE];
     
     createGrid(grid);
-    // printGrid(grid);
-    printCell(grid);
+    printGrid(grid);
+
+    Heap* closed_list = createHeap(); 
 
         for (int i = 0; i < GRID_SIZE; i++)
     {

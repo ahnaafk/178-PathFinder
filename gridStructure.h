@@ -24,7 +24,7 @@ typedef struct cell
     struct cell* parent;
     int f_cost;
     int g_cost;
-    int h_cost
+    int h_cost;
 } Cell;
 
 

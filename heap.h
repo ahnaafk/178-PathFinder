@@ -20,13 +20,13 @@ typedef struct heap
 } Heap;
 
 //Creates a heap and returns the pointer to the heap structure. 
-Heap* createHeap(int* nums);
+Heap* createHeap();
 
 //Pop the min value from the heap
-int popHeap(Heap* h);
+Cell* popHeap(Heap* h);
 
 //Push a value onto the heap
-void pushHeap(Heap* h, int data);
+void pushHeap(Heap* h, Cell* data);
 
 void insertHelper(Heap* h, int child);
 

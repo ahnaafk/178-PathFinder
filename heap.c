@@ -1,6 +1,6 @@
 #include "heap.h"
 
-Heap *createHeap(int *nums)
+Heap *createHeap()
 {
     Heap *h = (Heap *)malloc(sizeof(Heap *));
 
@@ -46,13 +46,13 @@ void heapify(Heap *h, int parent)
     }//if the f-costs are equivilent, then compare the h-costs. 
     else if (leftChild != -1 && h->arr[leftChild]->f_cost == h->arr[parent]->f_cost)
     {
-        (h->arr[leftChild]->h_cost < h->arr[parent]->h_cost) ? min = leftChild;
+        if (h->arr[leftChild]->h_cost < h->arr[parent]->h_cost) min = leftChild;
     }
     if (rightChild != -1 && h->arr[rightChild] < h->arr[parent]) {
         min = rightChild;
     }  else if (rightChild != -1 && h->arr[rightChild]->f_cost == h->arr[parent]->f_cost)
     {
-        (h->arr[rightChild]->h_cost < h->arr[parent]->h_cost) ? min = rightChild;
+        if (h->arr[rightChild]->h_cost < h->arr[parent]->h_cost) min = rightChild;
     }
     // Swapping the nodes
     if (min != parent)
@@ -70,25 +70,26 @@ void insertHelper(Heap *h, int child)
 {
     int parent = (child - 1) / 2;
 
-    if (h->arr[parent] > h->arr[child])
+    if (h->arr[parent]->f_cost > h->arr[child]->f_cost)
     {
         // swap if child is smaller than parent
-        int temp = h->arr[child];
+        Cell* temp = h->arr[child];
         h->arr[parent] = h->arr[child];
         h->arr[child] = temp;
 
+        //work your way up the heap to make sure that the heap is still in order. 
         insertHelper(h, parent);
     }
 }
 
-int popHeap(Heap *h)
+Cell* popHeap(Heap *h)
 {
-    int poppedItem;
+    Cell* poppedItem;
 
     if (h->size == 0)
     {
         printf("\nHeap is empty");
-        return -1;
+        return NULL;
     }
     // store popped item
     poppedItem = h->arr[0];
@@ -101,7 +102,7 @@ int popHeap(Heap *h)
     return poppedItem;
 }
 
-void pushHeap(Heap *h, int data)
+void pushHeap(Heap *h, Cell* data)
 {
     if (h->size < HEAP_CAPACITY)
     {
