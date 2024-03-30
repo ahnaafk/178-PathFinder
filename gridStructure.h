@@ -22,6 +22,9 @@ typedef struct cell
     struct cell* passenger;
     struct cell* destination;
     struct cell* parent;
+    int f_cost;
+    int g_cost;
+    int h_cost
 } Cell;
 
 
