@@ -64,6 +64,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
   // randomly create construction points along grid
   for (int i = 0; i < CONSTRUCTION_POINTS; i++)
   {
+    //figure out how to avoid the boxed in edge-case 
     createConstruction(grid);
   }
 
@@ -72,6 +73,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
   // Cell* passArr[PASSENGER_COUNT];
   for (int i = 0; i < PASSENGER_COUNT; i++)
   {
+    //each time we create a passenger, also must add the pair to a linked list. 
     Cell *pass = createPassenger(grid);
     Cell *dest = createDestination(grid);
 
