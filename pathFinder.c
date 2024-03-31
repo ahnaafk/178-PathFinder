@@ -11,14 +11,22 @@ Per Buba's structure
 void astar(Cell* start, Cell* passengers[], Cell* destinations[]) {
     //1. Check closest target
     int min; //holder for closest target
-    // Cell* minCell = findMinTarget(start, passengers, destinations); 
-    // int passenger_count = sizeof(passengers) / sizeof(Cell*);
+    Cell* minCell = findMinTarget(start, passengers, destinations);
+    // if (minCell[DESTINATION] == )
     
+//possible objectives
+//1. a passenger that we haven't picked up
+//2. a destination of a passenger that we HAVE picked up. 
 
+
+*/
 }
 
 //bruh gonna have to cahgne this whole function when the linked list is implemented. 
 Cell* findMinTarget(Cell* start, Cell* passengers[], Cell* destinations[]) {
+    //check both lists for the minimum h-cost. 
+    //realistically, we shouldn't check both lists and instead check the passengers we DONT have, and the destinations of the passengers we have. 
+    //TODO for Ethan, figure out a way to take the busList (passengers we have), and create a list with the passengers we don't have, and the destinations of hte passengers that we do have.  
     int passenger_count = PASSENGER; //TODO: change to the count of the linked list! 
     int minCost;
     Cell* minCell = malloc(sizeof(Cell*));
