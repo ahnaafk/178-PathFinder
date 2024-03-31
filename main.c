@@ -10,7 +10,22 @@ int main()
     srand(time(NULL));
 
     Cell *grid[GRID_SIZE][GRID_SIZE];
-    
+
+
+    //Creates List of Lists
+    LinkedList* lists [5];
+    LinkedList* passOnBus =createLinkedList();
+    lists [0]=passOnBus;
+    LinkedList* idlePass =createLinkedList();
+    lists [1]=idlePass;
+    LinkedList* allDest =createLinkedList();
+    lists [2]= allDest;
+    LinkedList* idleAndPassOnBus =createLinkedList();
+    lists [3]= idleAndPassOnBus;
+    LinkedList* pathToTrgt =createLinkedList();
+    lists [4]= pathToTrgt;
+
+
     createGrid(grid);
     printGrid(grid);
 
