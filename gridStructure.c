@@ -75,7 +75,9 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE],LinkedList* masterList[5])
   {
     //TODO for ETHAN: each time we create a passenger, also must add the pair to a linked list. 
     Cell *pass = createPassenger(grid);
+    addNode(masterList[1],pass);
     Cell *dest = createDestination(grid);
+    addNode(masterList[2],dest);
 
     // //populate the array with the pairs for ease of accessk
     // passArr[i] = pass;

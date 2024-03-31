@@ -7,15 +7,16 @@ LinkedList* createLinkedList() {
     LinkedList* list = (LinkedList*)malloc(sizeof(LinkedList));
     if (list) {
         list->head = NULL;
+        list->count=0;
     }
     return list;
 }
 
 // Function to add a node to the end of the linked list
-void addNode(LinkedList* list, Node* data) {
+void addNode(LinkedList* list, Cell* data) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     if (newNode) {
-        newNode->data = data;
+        newNode->cell = data;
         newNode->next = NULL;
         if (list->head == NULL) {
             list->head = newNode;
@@ -25,6 +26,7 @@ void addNode(LinkedList* list, Node* data) {
                 current = current->next;
             }
             current->next = newNode;
+            newNode->key=list->count;
             list->count++;
         }
     } else {
@@ -36,21 +38,20 @@ void addNode(LinkedList* list, Node* data) {
 int deleteNode(LinkedList* list, Node* data) {
     if(list->head !=NULL) {
         Node *current = list->head;
-        Node *previous = NULL;
-        int key = data->key;
+        Node *previous;
         while (current != NULL) {
-            if (current->key == key) {
+            if (current->key == data->key) {
                 if(current->key==list->head->key){
                     list->head=current->next;
                     free(current);
-                    return EXIT_SUCCESS;
                     list->count--;
+                    return EXIT_SUCCESS;
                 }
                 else {
                     previous->next = current->next;
                     free(current);
-                    return EXIT_SUCCESS;
                     list->count--;
+                    return EXIT_SUCCESS;
                 }
             }
             else {
@@ -65,10 +66,10 @@ int deleteNode(LinkedList* list, Node* data) {
 }
 
 // Function to find a node with given data in the linked list
-Node* findNode(LinkedList* list, Node* data) {
+Node* findNode(LinkedList* list, int key) {
     Node* current = list->head;
     while (current != NULL) {
-        if (current->key == data->key) {
+        if (current->key == key) {
             return current; // Node found
         }
         current = current->next;
@@ -78,15 +79,15 @@ Node* findNode(LinkedList* list, Node* data) {
 }
 
 //// Function to display the elements of the linked list
-//void displayList(LinkedList* list) {
-//    Node* current = list->head;
-//
-//    while (current != NULL) {
-//        printf("%d ", current->data->);
-//        current = current->next;
-//    }
-//    printf("\n");
-//}
+void displayList(LinkedList* list) {
+    Node* current = list->head;
+    printf("\n");
+    while (current != NULL) {
+        printf("%d ", current->key);
+        current = current->next;
+    }
+    printf("\n");
+}
 //
 //// Function to free memory allocated for the linked list
 //void destroyList(LinkedList* list) {
