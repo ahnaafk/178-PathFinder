@@ -28,7 +28,7 @@ void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
   array[1] = y;
 }
 
-void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
+void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE],LinkedList* masterList[5])
 {
   // initalize each part of the grid to an open space by default
   // Cell grid[GRID_SIZE][GRID_SIZE];

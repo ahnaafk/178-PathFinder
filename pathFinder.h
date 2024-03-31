@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "linkedList.h"
+#include "heap.h"
 
 //general process of the astar algorithm
 /*

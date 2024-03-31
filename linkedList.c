@@ -1,4 +1,6 @@
 #include "linkedList.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 // Function to create an empty linked list
 LinkedList* createLinkedList() {
@@ -23,6 +25,7 @@ void addNode(LinkedList* list, Node* data) {
                 current = current->next;
             }
             current->next = newNode;
+            list->count++;
         }
     } else {
         printf("Memory allocation failed!\n");
@@ -41,11 +44,13 @@ int deleteNode(LinkedList* list, Node* data) {
                     list->head=current->next;
                     free(current);
                     return EXIT_SUCCESS;
+                    list->count--;
                 }
                 else {
                     previous->next = current->next;
                     free(current);
                     return EXIT_SUCCESS;
+                    list->count--;
                 }
             }
             else {
