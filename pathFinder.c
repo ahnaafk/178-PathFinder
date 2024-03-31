@@ -17,20 +17,21 @@ void astar(Cell* start, Cell* passengers[], Cell* destinations[]) {
 
 }
 
+//bruh gonna have to cahgne this whole function when the linked list is implemented. 
 Cell* findMinTarget(Cell* start, Cell* passengers[], Cell* destinations[]) {
-    // int passenger_count = sizeof(passengers) / sizeof(Cell*); //will change this for a linked list count later
-    // int minCost;
-    // Cell* minCell = malloc(sizeof(Cell*));
-    // minCell = passengers[0]; 
-    // minCost = hCost(start, minCell);
-    // for (int i = 0; i < passenger_count; i++) {
-    //     Cell* tempCell = passengers[i]; 
-    //     int tempCost = hCost(start, minCell); 
-    //     if (tempCost < minCost) {
-    //         minCost = tempCost;  
-    //         minCell = tempCell; 
-    //     }
-    // }
+    int passenger_count = PASSENGER; //TODO: change to the count of the linked list! 
+    int minCost;
+    Cell* minCell = malloc(sizeof(Cell*));
+    minCell = passengers[0]; 
+    minCost = hCost(start, minCell);
+    for (int i = 0; i < passenger_count; i++) {
+        Cell* tempCell = passengers[i]; 
+        int tempCost = hCost(start, minCell); 
+        if (tempCost < minCost) {
+            minCost = tempCost;  
+            minCell = tempCell; 
+        }
+    }
 }
 
 void pathFinder(Cell* startNode, Cell* targetNode){
