@@ -41,11 +41,11 @@
 
 Cell* findMinTarget(Cell* start, Cell* passengers[], Cell* destinations[]);
 
-void astar(Cell* start, Cell* passengers[], Cell* destinations[]);
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[]);
 
-void pathFinder(Cell* startNode, Cell* targetNode);
+Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode);
 
-void retracePath(Cell startNode, Cell endNode);
+// void retracePath(Cell startNode, Cell endNode);
 
 int getDistance(Cell* A, Cell* B);
 
