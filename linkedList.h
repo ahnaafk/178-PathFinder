@@ -17,7 +17,7 @@ typedef struct cell
 } Cell;
 
 typedef struct Node {
-    Cell* data;
+    Cell* cell;
     struct Node* next;
     int key;
 } Node;
@@ -30,9 +30,9 @@ typedef struct LinkedList {
 
 // Function prototypes
 LinkedList* createLinkedList();
-void addNode(LinkedList* list, Node* data);
+void addNode(LinkedList* list, Cell* data);
 int deleteNode(LinkedList* list, Node* data);
-Node* findNode(LinkedList* list, Node* data);
+Node* findNode(LinkedList* list, int key);
 void displayList(LinkedList* list);
 void destroyList(LinkedList* list);
 
