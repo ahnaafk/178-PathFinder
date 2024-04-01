@@ -15,21 +15,21 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList
         // Finds the path to next target and sets the target to new starting cell
         startingCell = pathFinder(grid, startingCell, targetCell, masterList, listOfPaths);
 
-        //Passenger pickup routine:
+        // Passenger pickup routine:
         if (startingCell->cellData[PASSENGER] == 1)
         {
-            //Add the passenger's destination to the target list and add the passenger to the buslist
+            // Add the passenger's destination to the target list and add the passenger to the buslist
             addNode(masterList[TARGETLIST], startingCell->destination);
             addNode(masterList[PASSONBUS], startingCell);
 
-            //Delete the passenger from the idlelist and delete it from the target list. 
+            // Delete the passenger from the idlelist and delete it from the target list.
             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
         }
-        //Passenger dropoff routine
+        // Passenger dropoff routine
         else if (startingCell->cellData[DESTINATION] == 1)
         {
-            //Delete the destination off of the target list and delete the passenger from the bus list . 
+            // Delete the destination off of the target list and delete the passenger from the bus list .
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
             deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
         }
@@ -120,8 +120,8 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
                     if (gCost(currentNode, neighbour) < neighbour->g_cost || !inOpen(openSet, neighbour))
                     {
                         neighbour->f_cost = fCost(startNode, targetNode, neighbour);
-                        neighbour->h_cost = hCost(startNode, targetNode);
-                        neighbour->g_cost = gCost(startNode, targetNode);
+                        neighbour->g_cost = gCost(startNode, neighbour);
+                        neighbour->h_cost = hCost(targetNode, neighbour);
                         neighbour->parent = currentNode;
                         if (!inOpen(openSet, neighbour))
                             pushHeap(openSet, neighbour);
@@ -150,8 +150,10 @@ void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], Link
         currentCell = currentCell->parent;
     }
 
+    addNode(pathList[i], currentCell);
+
     // Reverse path now because it's in opposite order.
-    // reverseList(tempList);
+    reverseList(pathList[i]);
 }
 
 void reverseList(LinkedList *list)
@@ -210,6 +212,7 @@ int hCost(Cell *targetNode, Cell *currentNode)
 // fCost function:
 int fCost(Cell *startNode, Cell *targetNode, Cell *currentNode)
 {
+
     return gCost(startNode, currentNode) + hCost(targetNode, currentNode);
 }
 
