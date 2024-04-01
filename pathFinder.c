@@ -1,32 +1,42 @@
 #include "pathFinder.h"
 #include <math.h>
 
-//Finds min target from starting cell, finds shortest path from starting
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList* masterList[4],LinkedList* listOfPaths[35]) {
+// Finds min target from starting cell, finds shortest path from starting
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *listOfPaths[35])
+{
     Cell *startingCell = start;
-    Cell *endingCell;
-    //Loop while targets are still available
-    while (masterList[TARGETLIST]->head != NULL) {
-        //Find the next target
-        endingCell = findMinTarget(startingCell, masterList[TARGETLIST]);
-        //Finds the path to next target and sets the target to new starting cell
-        startingCell = pathFinder(grid, startingCell, endingCell);
-        //If new startingCell is a passenger do the following
-        if (startingCell->cellData[PASSENGER] == 1) {
+    Cell *targetCell;
+    // Loop while targets are still available
+    while (masterList[TARGETLIST]->head != NULL)
+    {
+        // Find the next target
+        targetCell = findMinTarget(startingCell, masterList[TARGETLIST]);
+
+        // Finds the path to next target and sets the target to new starting cell
+        startingCell = pathFinder(grid, startingCell, targetCell, masterList, listOfPaths);
+
+        // Passenger pickup routine:
+        if (startingCell->cellData[PASSENGER] == 1)
+        {
+            // Add the passenger's destination to the target list and add the passenger to the buslist
             addNode(masterList[TARGETLIST], startingCell->destination);
             addNode(masterList[PASSONBUS], startingCell);
+
+            // Delete the passenger from the idlelist and delete it from the target list.
             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
-            //If the new startingCell is a destination do the following
-        } else if (startingCell->cellData[DESTINATION] == 1) {
+        }
+        // Passenger dropoff routine
+        else if (startingCell->cellData[DESTINATION] == 1)
+        {
+            // Delete the destination off of the target list and delete the passenger from the bus list .
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
             deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
         }
-
     }
 }
 
-Cell* findMinTarget(Cell* start, LinkedList* targetList)
+Cell *findMinTarget(Cell *start, LinkedList *targetList)
 {
 
     // possible objectives
@@ -35,33 +45,37 @@ Cell* findMinTarget(Cell* start, LinkedList* targetList)
 
     // realistically, we shouldn't check both lists and instead check the passengers we DONT have, and the destinations of the passengers we have.
     // TODO for Ethan, figure out a way to take the busList (passengers we have), and create a list with the passengers we don't have, and the destinations of hte passengers that we do have.
-    Cell* minTarget=NULL;
+    Cell *minTarget = NULL;
     int minHCost;
-    Node* traverser=targetList->head;
-    while(traverser!=NULL){
-        if(traverser==targetList->head){
-            minHCost=hCost(traverser->cell,start);
-            minTarget= traverser->cell;
+    Node *traverser = targetList->head;
+    while (traverser != NULL)
+    {
+        if (traverser == targetList->head)
+        {
+            minHCost = hCost(traverser->cell, start);
+            minTarget = traverser->cell;
         }
-        else{
-            if(hCost(traverser->cell,start)<minHCost){
-                minHCost=hCost(traverser->cell,start);
-                minTarget= traverser->cell;
+        else
+        {
+            if (hCost(traverser->cell, start) < minHCost)
+            {
+                minHCost = hCost(traverser->cell, start);
+                minTarget = traverser->cell;
             }
         }
-        traverser=traverser->next;
+        traverser = traverser->next;
     }
-    return(minTarget);
+    return (minTarget);
 }
 
 // finds a path to a target node, returns the new starting node.
-Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode)
+Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *listOfPaths[35])
 {
 
     // Initialize openSet
     Heap *openSet = createHeap();
     // Initialize closedSet
-    LinkedList* closedSet = createLinkedList();
+    LinkedList *closedSet = createLinkedList();
 
     // Add startNode to open set
     pushHeap(openSet, startNode);
@@ -74,12 +88,11 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
         // add current node to closed set
         addNode(closedSet, currentNode);
 
-
         // if the coordinates match between the current node and the target node, we have a match!
         if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
         {
-            retracePath(currentNode, targetNode);
-            return currentNode; // not sure if we return this.
+            retracePath(startNode, currentNode, masterList, listOfPaths);
+            return currentNode;
         }
 
         // get each neighbour of the current node.
@@ -104,51 +117,60 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
 
                     // TODO: verify this logic
                     // TODO create the isOpen function once linked list is created.
-                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !isOpen(neighbour))
+                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !inOpen(openSet, neighbour))
                     {
                         neighbour->f_cost = fCost(startNode, targetNode, neighbour);
+                        neighbour->g_cost = gCost(startNode, neighbour);
+                        neighbour->h_cost = hCost(targetNode, neighbour);
                         neighbour->parent = currentNode;
-                        if (!isOpen(neighbour))
+                        if (!inOpen(openSet, neighbour))
                             pushHeap(openSet, neighbour);
                     }
                 }
             }
         }
     }
+    return NULL;
 }
 
-void retracePath(Cell *startCell, Cell *endCell, LinkedList* pathList[35])
+void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35])
 {
-    
-    Cell* currentCell = endCell;
-    LinkedList* tempList; 
+
+    Cell *currentCell = endCell;
+    // printf("Starting Cell: [%d][%d] \n", startCell ->coordinates[0], startCell ->coordinates[1]);
     int i = 0;
-    while (pathList[i] != NULL) i++; //find an empty path within the path list. 
+    while (pathList[i] != NULL)
+        i++; // find an empty path within the path list.
+    pathList[i] = createLinkedList();
 
-    //Create a templist with all the parents of the nodes. Head -> endNode
-    while(currentCell != startCell){
-    addNode(tempList,currentCell);           
-    currentCell = currentCell->parent;
+    // Create a templist with all the parents of the nodes. Head -> endNode
+    while (currentCell != startCell)
+    {
+        addNode(pathList[i], currentCell);
+        currentCell = currentCell->parent;
     }
 
-    //Reverse path now because it's in opposite order. 
-    reverseList(tempList);
-    pathList[i] = tempList;
-    }
+    addNode(pathList[i], currentCell);
 
-void reverseList(LinkedList* list) {
-    Node* prev = NULL;
-    Node* current = list -> head; 
-    Node* next = NULL;
+    // Reverse path now because it's in opposite order.
+    reverseList(pathList[i]);
+}
 
-    while (current != NULL) {
-        next = current -> next;
-        current -> next = prev;
+void reverseList(LinkedList *list)
+{
+    Node *prev = NULL;
+    Node *current = list->head;
+    Node *next = NULL;
+
+    while (current != NULL)
+    {
+        next = current->next;
+        current->next = prev;
         prev = current;
-        current = next; 
+        current = next;
     }
 
-    list -> head = prev; 
+    list->head = prev;
 }
 
 int getDistance(Cell *A, Cell *B)
@@ -190,24 +212,29 @@ int hCost(Cell *targetNode, Cell *currentNode)
 // fCost function:
 int fCost(Cell *startNode, Cell *targetNode, Cell *currentNode)
 {
+
     return gCost(startNode, currentNode) + hCost(targetNode, currentNode);
 }
 
-int inList(LinkedList* list, Cell* node) {
-    Node* currentNode = list -> head; 
-    for (int i = 0; i < list -> count; i++)
+int inList(LinkedList *list, Cell *node)
+{
+    Node *currentNode = list->head;
+    for (int i = 0; i < list->count; i++)
     {
-        if (currentNode->cell == node) return TRUE;
-        currentNode = currentNode -> next; 
+        if (currentNode->cell == node)
+            return TRUE;
+        currentNode = currentNode->next;
     }
-    return FALSE;  
+    return FALSE;
 }
 
-int inClosed(Heap* h, Cell* node) {
-    
-    for (int i = 0; i < h ->size; i++)
+int inOpen(Heap *h, Cell *node)
+{
+
+    for (int i = 0; i < h->size; i++)
     {
-        if (node == h ->arr[i]) return TRUE;
+        if (node == h->arr[i])
+            return TRUE;
     }
     return FALSE;
 }
