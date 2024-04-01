@@ -155,23 +155,28 @@ int insertCoordsHandle(LiquidCrystal *lcd){
   comparing = compareCoord(pickup, //array of randomized points// );
 
 
-  if (comparing == EXIT_TRUE){ //pickup coord is construction point
+  if (comparing == EXIT_OK){ //pickup coord is construction point
+    lcd->clear();
     lcd->setCursor(0, 0);
     lcd->print("Invalid pickup");
-    insertCoordsHandle(lcd);
+    delay(2000);
+    return EXIT_FALSE;
   }
   
   else{ //pickup coord is not construction point, move on to dropoff coord
+    lcd->clear();
     lcd->setCursor(0, 0);
     lcd->print("Dropoff:");
     
     dropoff = numberHandling(lcd);
     comparing = compareCoord(dropoff, //array of randomized points// ); 
 
-    if(comparing == EXIT_TRUE){ //dropoff coord is construction point
+    if(comparing == EXIT_OK){ //dropoff coord is construction point
+      lcd->clear();
       lcd->setCursor(0, 0);
       lcd->print("Invalid dropoff");
-      insertCoordsHandle(lcd);
+      delay(2000);
+      return EXIT_FALSE;
     }
 
     else{ //dropoff coord is not construction point
