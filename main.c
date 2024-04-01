@@ -37,6 +37,5 @@ int main()
             free(grid[i][j]);
         }
     }
-    displayList(masterList[1]);
     return 0;
 }
