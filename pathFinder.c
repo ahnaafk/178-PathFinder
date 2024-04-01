@@ -10,7 +10,7 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList* masterList[
         //Find the next target
         endingCell = findMinTarget(startingCell, masterList[TARGETLIST]);
         //Finds the path to next target and sets the target to new starting cell
-        startingCell = pathFinder(grid, startingCell, endingCell);
+        startingCell = pathFinder(grid, startingCell, endingCell,masterList,listOfPaths);
         //If new startingCell is a passenger do the following
         if (startingCell->cellData[PASSENGER] == 1) {
             addNode(masterList[TARGETLIST], startingCell->destination);
@@ -55,7 +55,7 @@ Cell* findMinTarget(Cell* start, LinkedList* targetList)
 }
 
 // finds a path to a target node, returns the new starting node.
-Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode)
+Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList* masterList[4],LinkedList* listOfPaths[35] )
 {
 
     // Initialize openSet
@@ -78,7 +78,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
         // if the coordinates match between the current node and the target node, we have a match!
         if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
         {
-            retracePath(currentNode, targetNode);
+            retracePath(currentNode, targetNode, masterList, listOfPaths);
             return currentNode; // not sure if we return this.
         }
 
@@ -104,11 +104,11 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
 
                     // TODO: verify this logic
                     // TODO create the isOpen function once linked list is created.
-                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !isOpen(neighbour))
+                    if (gCost(currentNode, neighbour) < neighbour->g_cost || inOpen(openSet, neighbour))
                     {
                         neighbour->f_cost = fCost(startNode, targetNode, neighbour);
                         neighbour->parent = currentNode;
-                        if (!isOpen(neighbour))
+                        if (!inOpen(openSet, neighbour))
                             pushHeap(openSet, neighbour);
                     }
                 }
@@ -117,7 +117,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
     }
 }
 
-void retracePath(Cell *startCell, Cell *endCell, LinkedList* pathList[35])
+void retracePath(Cell *startCell, Cell *endCell, LinkedList* masterList[4],LinkedList* pathList[35])
 {
     
     Cell* currentCell = endCell;
@@ -203,7 +203,7 @@ int inList(LinkedList* list, Cell* node) {
     return FALSE;  
 }
 
-int inClosed(Heap* h, Cell* node) {
+int inOpen(Heap* h, Cell* node) {
     
     for (int i = 0; i < h ->size; i++)
     {
