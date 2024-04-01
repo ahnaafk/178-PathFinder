@@ -73,7 +73,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE],LinkedList* masterList[5])
   // Cell* passArr[PASSENGER_COUNT];
   for (int i = 0; i < PASSENGER_COUNT; i++)
   {
-    //TODO for ETHAN: each time we create a passenger, also must add the pair to a linked list. 
+    //TODO for ETHAN: each time we create a passenger, also must add the pair to a linked list. Done
     Cell *pass = createPassenger(grid);
     addNode(masterList[1],pass);
     Cell *dest = createDestination(grid);

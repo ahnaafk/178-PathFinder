@@ -20,6 +20,8 @@ void addNode(LinkedList* list, Cell* data) {
         newNode->next = NULL;
         if (list->head == NULL) {
             list->head = newNode;
+            newNode->key=list->count;
+            list->count++;
         } else {
             Node* current = list->head;
             while (current->next != NULL) {
