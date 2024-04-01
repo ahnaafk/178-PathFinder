@@ -1,8 +1,9 @@
 #include "heap.h"
 
+//Create pointer to empty heap.
 Heap *createHeap()
 {
-    Heap *h = (Heap *)malloc(sizeof(Heap *));
+    Heap *h = (Heap *) malloc(sizeof(Heap));
 
     // always check if the pointer is null
     if (h == NULL)
@@ -12,17 +13,17 @@ Heap *createHeap()
     }
 
     h->size = 0;
-    int i;
-    for (i = 0; i < HEAP_CAPACITY; i++)
-    {
-        h->arr[i] = malloc(sizeof(Cell *));
-    }
-    h->size = i;
-    while (i >= 0)
-    {
-        heapify(h, i);
-        i--;
-    }
+    // int i;
+    // for (i = 0; i < HEAP_CAPACITY; i++)
+    // {
+    //     h->arr[i] = (Cell*) malloc(sizeof(Cell));
+    // }
+    // // h->size = i;
+    // while (i >= 0)
+    // {
+    //     heapify(h, i);
+    //     i--;
+    // }
     return h;
 }
 
@@ -73,7 +74,7 @@ void insertHelper(Heap *h, int child)
     if (h->arr[parent]->f_cost > h->arr[child]->f_cost)
     {
         // swap if child is smaller than parent
-        Cell* temp = h->arr[child];
+        Cell* temp = h->arr[parent];
         h->arr[parent] = h->arr[child];
         h->arr[child] = temp;
 
