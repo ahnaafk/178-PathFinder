@@ -13,17 +13,7 @@ Heap *createHeap()
     }
 
     h->size = 0;
-    // int i;
-    // for (i = 0; i < HEAP_CAPACITY; i++)
-    // {
-    //     h->arr[i] = (Cell*) malloc(sizeof(Cell));
-    // }
-    // // h->size = i;
-    // while (i >= 0)
-    // {
-    //     heapify(h, i);
-    //     i--;
-    // }
+
     return h;
 }
 
