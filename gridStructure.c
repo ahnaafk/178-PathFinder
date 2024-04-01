@@ -5,6 +5,8 @@
 #define PASSENGER_COUNT 5
 #define VERBOSE 0
 
+int constructionPoints[CONSTRUCTION_POINTS][2];
+
 enum EXIT {
     EXIT_OK,
     EXIT_ERR
@@ -58,7 +60,8 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5]) {
     // randomly create construction points along grid
     for (int i = 0; i < CONSTRUCTION_POINTS; i++) {
         //figure out how to avoid the boxed in edge-case
-        createConstruction(grid);
+        createConstruction(grid, i);
+        
     }
 
     // // create random passenger destination pairs.
@@ -94,7 +97,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5]) {
 }
 
 // Randomly generate a construction point within the grid.
-int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE]) {
+int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i) {
     // random ints used to index grid
     int idx[2];
     generateRandomIndex(idx, grid);
@@ -103,6 +106,9 @@ int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE]) {
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[CONSTRUCTION] = TRUE;
+
+    constructionPoints[i][0] = rx;
+    constructionPoints[i][1] = ry;
 
     return EXIT_OK;
 }
