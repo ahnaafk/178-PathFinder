@@ -2,55 +2,24 @@
 #include <stdlib.h>
 #include "heap.h"
 
-//general process of the astar algorithm
-/*
-1. Initialize the open list
-2.  Initialize the closed list
-    put the starting node on the open 
-    list (you can leave its f at zero)
-3.  while the open list is not empty
-    a) find the node with the least f on 
-       the open list, call it "q"
-    b) pop q off the open list
-  
-    c) generate q's 8 successors and set their 
-       parents to q
-   
-    d) for each successor
-        i) if successor is the goal, stop search
-        
-        ii) else, compute both g and h for successor
-          successor.g = q.g + distance between 
-                              successor and q
-          successor.h = distance from goal to 
-          successor (we will do this usign diagonal distance)
-          
-          successor.f = successor.g + successor.h
-        iii) if a node with the same position as 
-            successor is in the OPEN list which has a 
-           lower f than successor, skip this successor
-        iV) if a node with the same position as 
-            successor  is in the CLOSED list which has
-            a lower f than successor, skip this successor
-            otherwise, add  the node to the open list
-     end (for loop)
-  
-    e) push q on the closed list
-    end (while loop)*/
+Cell *findMinTarget(Cell *start, LinkedList *targetList);
 
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *listOfPaths[35]);
 
-Cell* findMinTarget(Cell* start, Cell* passengers[], Cell* destinations[]);
+Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *listOfPaths[35]);
 
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[]);
+void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *listOfPaths[35]);
 
-Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode);
+void reverseList(LinkedList *list);
 
-// void retracePath(Cell startNode, Cell endNode);
+int getDistance(Cell *A, Cell *B);
 
-int getDistance(Cell* A, Cell* B);
+int gCost(Cell *startNode, Cell *currentNode);
 
-int gCost(Cell* startNode, Cell* currentNode);
+int hCost(Cell *targetNode, Cell *currentNode);
 
-int hCost(Cell* targetNode, Cell* currentNode);
+int fCost(Cell *startNode, Cell *targetNode, Cell *currentNode);
 
-int fCost(Cell* startNode, Cell* targetNode, Cell* currentNode);
+int inOpen(Heap *h, Cell *node);
+
+int inList(LinkedList *list, Cell *node);
