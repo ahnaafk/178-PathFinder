@@ -1,3 +1,12 @@
+#define PASSONBUS 0
+#define IDLEPASS 1
+#define ALLDEST 2
+#define TARGETLIST 3
+
+
+
+
+
 // Define the structure for the node in the linked list
 typedef struct cell
 {
@@ -32,7 +41,7 @@ typedef struct LinkedList {
 LinkedList* createLinkedList();
 void addNode(LinkedList* list, Cell* data);
 int deleteNode(LinkedList* list, Node* data);
-Node* findNode(LinkedList* list, int key);
+Node* findNode(LinkedList* list, Cell* cell);
 void displayList(LinkedList* list);
 void destroyList(LinkedList* list);
 

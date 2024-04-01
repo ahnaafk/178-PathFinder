@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include "heap.h"
 
-Cell* findMinTarget(Cell* start, Cell* passengers[], Cell* destinations[]);
+Cell* findMinTarget(Cell* start, LinkedList* targetList);
 
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[]);
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList** masterList,LinkedList** listOfPaths);
 
 Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode);
 
