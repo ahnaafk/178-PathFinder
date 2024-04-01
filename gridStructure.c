@@ -15,15 +15,14 @@ void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     // method to generate random integers between 1 and N that i found online.
     // random ints used to index grid
-    int x = rand() % (GRID_SIZE);
-    int y = rand() % (GRID_SIZE);
+    int x ;
+    int y ;
 
     // If the indexed cell is NOT an open space, then we cannot turn it into something else.
-    while (grid[x][y]->cellData[OPEN] == FALSE && x !=0 && y!=0)
-    {
+    do{
         x = rand() % (GRID_SIZE);
         y = rand() % (GRID_SIZE);
-    }
+    }while ((x == 0 && y == 0) || (grid[x][y] && grid[x][y]->cellData[OPEN] == FALSE));
 
     array[0] = x;
     array[1] = y;
