@@ -1,13 +1,6 @@
 #include "pathFinder.h"
 #include <math.h>
 
-/*
-Per Buba's structure
-1. Check closest target -> minimize h-cost
-2. if (dest) -> check if we have their passenger? pathfinder(target): go next
-3. if (pass) -> pathfinder(pass);
-*/
-
 void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[])
 {
     // // 1. Check closest target
@@ -64,7 +57,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
         // Take smallest f node or if equal take lowest h
         Cell *currentNode = popHeap(openSet);
 
-        // TODO: add current node to closed set (linked list)
+        // add current node to closed set
         addNode(closedSet, currentNode);
 
 
@@ -110,47 +103,6 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
     }
 }
 
-/*
-        //push neighbours of the popped node to the heap
-        for (int i = 1; i < openSet -> size; i++){
-            openSetF = fCost(startNode, targetNode, openSet[i]);
-            currentF = fCost(startNode, targetNode, currentNode);
-            openSetH = hCost(targetNode, openSet[i]);
-            currentH = hCost(targetNode, currentNode);
-
-            if ( openSetF < currentF || (openSetF == currentF && openSetH < currentH){
-                currentNode = openSet[i];
-            }
-
-            //remove node from openSet and add to closed set
-            remove(currentNode, openSet); FIX THIS
-            add(currentNode, closedSet); FIX THIS
-
-            //Check if current node is target node
-            if (currentNode coordinates == targetNode coordinates){ FIX THIS
-                //retrace path function??
-                return;
-            }
-
-            for (int i = 0; i < 8; i ++){
-                List neighbour = getNeighbours(currentNode);
-
-                if((neighbour[i]->cellData[1] != 1) || neighbour[i] is in closedSet) FIX THIS
-                    continue;
-
-                int movingCost = gCost(startNode, currentNode) + getDistance(currentNode, neighbour[i]);
-                if (movingCost < gCost(startNode, neighbour[i]) || open set doesnt contain neighbour[i]){ FIX THIS
-                    neighbour[i]->g = movingCost;                         FIX THIS
-                    neighbour[i]->h = hCost(targetNode, neighbour[i]);    FIX THIS
-                    neighbour[i]->parent = currentNode;                   FIX THIS
-
-                    if(open set doesnt have neighbour[i])
-                        add neighbour[i] to openSet
-                }
-            }
-        }
-
-*/
 void retracePath(Cell *startNode, Cell *endNode)
 {
     // List* path = newList(); FIX THIS
@@ -162,10 +114,6 @@ void retracePath(Cell *startNode, Cell *endNode)
     //}
     // Reverse path now because it's in opposite order
 }
-
-// int isClosed(Cell* node, LinkedList closedList ) {
-//     //check if node is in the closed list.
-// }
 
 int getDistance(Cell *A, Cell *B)
 {
