@@ -27,16 +27,6 @@ int main()
 
     astar(grid, grid[0][0], masterList, listOfPaths);
 
-    LinkedList* newList = createLinkedList(); 
-    addNode(newList, grid[0][0]);
-    addNode(newList, grid[1][1]);
-    addNode(newList, grid[2][2]);
-    addNode(newList, grid[3][3]);
-    addNode(newList, grid[4][4]);
-
-    displayList(listOfPaths[0]);
-    displayList(listOfPaths[1]);
-
     for (int i = 0; i < GRID_SIZE; i++)
     {
         for (int j = 0; j < GRID_SIZE; j++)
