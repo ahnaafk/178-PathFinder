@@ -19,7 +19,7 @@ void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
     int y = rand() % (GRID_SIZE);
 
     // If the indexed cell is NOT an open space, then we cannot turn it into something else.
-    while (grid[x][y]->cellData[OPEN] == FALSE)
+    while (grid[x][y]->cellData[OPEN] == FALSE && x !=0 && y!=0)
     {
         x = rand() % (GRID_SIZE);
         y = rand() % (GRID_SIZE);
@@ -125,6 +125,7 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
     int rx = idx[0];
     int ry = idx[1];
 
+
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[PASSENGER] = TRUE;
 
@@ -138,7 +139,7 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
     generateRandomIndex(idx, grid);
     int rx = idx[0];
     int ry = idx[1];
-
+    
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[DESTINATION] = TRUE;
 
