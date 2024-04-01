@@ -3,60 +3,77 @@
 #include <stdio.h>
 
 // Function to create an empty linked list
-LinkedList* createLinkedList() {
-    LinkedList* list = (LinkedList*)malloc(sizeof(LinkedList));
-    if (list) {
+LinkedList *createLinkedList()
+{
+    LinkedList *list = (LinkedList *)malloc(sizeof(LinkedList));
+    if (list)
+    {
         list->head = NULL;
-        list->count=0;
+        list->count = 0;
     }
     return list;
 }
 
 // Function to add a node to the end of the linked list
-void addNode(LinkedList* list, Cell* data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode) {
+void addNode(LinkedList *list, Cell *data)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
+    if (newNode)
+    {
         newNode->cell = data;
         newNode->next = NULL;
-        if (list->head == NULL) {
+        if (list->head == NULL)
+        {
             list->head = newNode;
-            newNode->key=list->count;
+            newNode->key = list->count;
             list->count++;
-        } else {
-            Node* current = list->head;
-            while (current->next != NULL) {
+        }
+        else
+        {
+            Node *current = list->head;
+            while (current->next != NULL)
+            {
                 current = current->next;
             }
             current->next = newNode;
-            newNode->key=list->count;
+            newNode->key = list->count;
             list->count++;
         }
-    } else {
+    }
+    else
+    {
         printf("Memory allocation failed!\n");
     }
 }
 
 // Function to delete a node with given data from the linked list
-int deleteNode(LinkedList* list, Node* data) {
-    if(list->head !=NULL) {
+int deleteNode(LinkedList *list, Node *data)
+{
+    if (list->head != NULL)
+    {
         Node *current = list->head;
         Node *previous;
-        while (current != NULL) {
-            if (current->key == data->key) {
-                if(current->key==list->head->key){
-                    list->head=current->next;
+        while (current != NULL)
+        {
+            if (current->key == data->key)
+            {
+                if (current->key == list->head->key)
+                {
+                    list->head = current->next;
                     free(current);
                     list->count--;
                     return EXIT_SUCCESS;
                 }
-                else {
+                else
+                {
                     previous->next = current->next;
                     free(current);
                     list->count--;
                     return EXIT_SUCCESS;
                 }
             }
-            else {
+            else
+            {
                 previous = current;
                 current = current->next;
             }
@@ -68,10 +85,13 @@ int deleteNode(LinkedList* list, Node* data) {
 }
 
 // Function to find a node with given data in the linked list
-Node* findNode(LinkedList* list, Cell* cell) {
-    Node* current = list->head;
-    while (current != NULL) {
-        if (current->cell == cell) {
+Node *findNode(LinkedList *list, Cell *cell)
+{
+    Node *current = list->head;
+    while (current != NULL)
+    {
+        if (current->cell == cell)
+        {
             return current; // Node found
         }
         current = current->next;
@@ -81,10 +101,12 @@ Node* findNode(LinkedList* list, Cell* cell) {
 }
 
 //// Function to display the elements of the linked list
-void displayList(LinkedList* list) {
-    Node* current = list->head;
+void displayList(LinkedList *list)
+{
+    Node *current = list->head;
     printf("\n");
-    while (current != NULL) {
+    while (current != NULL)
+    {
         printf("%d ", current->key);
         current = current->next;
     }
@@ -92,15 +114,15 @@ void displayList(LinkedList* list) {
 }
 //
 //// Function to free memory allocated for the linked list
-//void destroyList(LinkedList* list) {
-//    Node* current = list->head;
-//    Node* next;
+// void destroyList(LinkedList* list) {
+//     Node* current = list->head;
+//     Node* next;
 //
-//    while (current != NULL) {
-//        next = current->next;
-//        free(current);
-//        current = next;
-//    }
+//     while (current != NULL) {
+//         next = current->next;
+//         free(current);
+//         current = next;
+//     }
 //
-//    free(list);
-//}
+//     free(list);
+// }

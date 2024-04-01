@@ -1,9 +1,9 @@
 #include "heap.h"
 
-//Create pointer to empty heap.
+// Create pointer to empty heap.
 Heap *createHeap()
 {
-    Heap *h = (Heap *) malloc(sizeof(Heap));
+    Heap *h = (Heap *)malloc(sizeof(Heap));
 
     // always check if the pointer is null
     if (h == NULL)
@@ -34,21 +34,25 @@ void heapify(Heap *h, int parent)
     if (leftChild != -1 && h->arr[leftChild]->f_cost < h->arr[parent]->f_cost)
     {
         min = leftChild;
-    }//if the f-costs are equivilent, then compare the h-costs. 
+    } // if the f-costs are equivilent, then compare the h-costs.
     else if (leftChild != -1 && h->arr[leftChild]->f_cost == h->arr[parent]->f_cost)
     {
-        if (h->arr[leftChild]->h_cost < h->arr[parent]->h_cost) min = leftChild;
+        if (h->arr[leftChild]->h_cost < h->arr[parent]->h_cost)
+            min = leftChild;
     }
-    if (rightChild != -1 && h->arr[rightChild] < h->arr[parent]) {
-        min = rightChild;
-    }  else if (rightChild != -1 && h->arr[rightChild]->f_cost == h->arr[parent]->f_cost)
+    if (rightChild != -1 && h->arr[rightChild] < h->arr[parent])
     {
-        if (h->arr[rightChild]->h_cost < h->arr[parent]->h_cost) min = rightChild;
+        min = rightChild;
+    }
+    else if (rightChild != -1 && h->arr[rightChild]->f_cost == h->arr[parent]->f_cost)
+    {
+        if (h->arr[rightChild]->h_cost < h->arr[parent]->h_cost)
+            min = rightChild;
     }
     // Swapping the nodes
     if (min != parent)
     {
-        Cell* temp = h->arr[min];
+        Cell *temp = h->arr[min];
         h->arr[min] = h->arr[parent];
         h->arr[parent] = temp;
 
@@ -64,18 +68,18 @@ void insertHelper(Heap *h, int child)
     if (h->arr[parent]->f_cost > h->arr[child]->f_cost)
     {
         // swap if child is smaller than parent
-        Cell* temp = h->arr[parent];
+        Cell *temp = h->arr[parent];
         h->arr[parent] = h->arr[child];
         h->arr[child] = temp;
 
-        //work your way up the heap to make sure that the heap is still in order. 
+        // work your way up the heap to make sure that the heap is still in order.
         insertHelper(h, parent);
     }
 }
 
-Cell* popHeap(Heap *h)
+Cell *popHeap(Heap *h)
 {
-    Cell* poppedItem;
+    Cell *poppedItem;
 
     if (h->size == 0)
     {
@@ -93,7 +97,7 @@ Cell* popHeap(Heap *h)
     return poppedItem;
 }
 
-void pushHeap(Heap *h, Cell* data)
+void pushHeap(Heap *h, Cell *data)
 {
     if (h->size < HEAP_CAPACITY)
     {
