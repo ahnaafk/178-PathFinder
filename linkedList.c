@@ -82,6 +82,7 @@ int deleteNode(LinkedList *list, Node *data)
     }
     else
         printf("List is Empty");
+        return EXIT_FAILURE;
 }
 
 // Function to find a node with given data in the linked list

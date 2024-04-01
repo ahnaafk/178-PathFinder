@@ -130,6 +130,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
             }
         }
     }
+    return NULL;
 }
 
 void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35])
