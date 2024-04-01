@@ -27,7 +27,7 @@ int main()
 
     astar(grid, grid[0][0], masterList, listOfPaths);
 
-    // displayList(listOfPaths[0]);
+    displayList(listOfPaths[0]);
 
     for (int i = 0; i < GRID_SIZE; i++)
     {

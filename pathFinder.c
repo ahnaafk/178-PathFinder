@@ -5,25 +5,31 @@
 void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *listOfPaths[35])
 {
     Cell *startingCell = start;
-    Cell *endingCell;
+    Cell *targetCell;
     // Loop while targets are still available
     while (masterList[TARGETLIST]->head != NULL)
     {
         // Find the next target
-        endingCell = findMinTarget(startingCell, masterList[TARGETLIST]);
+        targetCell = findMinTarget(startingCell, masterList[TARGETLIST]);
+
         // Finds the path to next target and sets the target to new starting cell
-        startingCell = pathFinder(grid, startingCell, endingCell, masterList, listOfPaths);
-        // If new startingCell is a passenger do the following
+        startingCell = pathFinder(grid, startingCell, targetCell, masterList, listOfPaths);
+
+        //Passenger pickup routine:
         if (startingCell->cellData[PASSENGER] == 1)
         {
+            //Add the passenger's destination to the target list and add the passenger to the buslist
             addNode(masterList[TARGETLIST], startingCell->destination);
             addNode(masterList[PASSONBUS], startingCell);
+
+            //Delete the passenger from the idlelist and delete it from the target list. 
             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
-            // If the new startingCell is a destination do the following
         }
+        //Passenger dropoff routine
         else if (startingCell->cellData[DESTINATION] == 1)
         {
+            //Delete the destination off of the target list and delete the passenger from the bus list . 
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
             deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
         }
@@ -85,8 +91,8 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
         // if the coordinates match between the current node and the target node, we have a match!
         if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
         {
-            retracePath(currentNode, targetNode, masterList, listOfPaths);
-            return currentNode; // not sure if we return this.
+            retracePath(startNode, currentNode, masterList, listOfPaths);
+            return currentNode;
         }
 
         // get each neighbour of the current node.
@@ -111,9 +117,11 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
 
                     // TODO: verify this logic
                     // TODO create the isOpen function once linked list is created.
-                    if (gCost(currentNode, neighbour) < neighbour->g_cost || inOpen(openSet, neighbour))
+                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !inOpen(openSet, neighbour))
                     {
                         neighbour->f_cost = fCost(startNode, targetNode, neighbour);
+                        neighbour->h_cost = hCost(startNode, targetNode);
+                        neighbour->g_cost = gCost(startNode, targetNode);
                         neighbour->parent = currentNode;
                         if (!inOpen(openSet, neighbour))
                             pushHeap(openSet, neighbour);
@@ -128,21 +136,21 @@ void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], Link
 {
 
     Cell *currentCell = endCell;
-    LinkedList *tempList;
+    // printf("Starting Cell: [%d][%d] \n", startCell ->coordinates[0], startCell ->coordinates[1]);
     int i = 0;
     while (pathList[i] != NULL)
         i++; // find an empty path within the path list.
+    pathList[i] = createLinkedList();
 
     // Create a templist with all the parents of the nodes. Head -> endNode
     while (currentCell != startCell)
     {
-        addNode(tempList, currentCell);
+        addNode(pathList[i], currentCell);
         currentCell = currentCell->parent;
     }
 
     // Reverse path now because it's in opposite order.
-    reverseList(tempList);
-    pathList[i] = tempList;
+    // reverseList(tempList);
 }
 
 void reverseList(LinkedList *list)

@@ -105,9 +105,11 @@ void displayList(LinkedList *list)
 {
     Node *current = list->head;
     printf("\n");
+    if (list -> head == NULL) printf("NULL list");
     while (current != NULL)
     {
         printf("%d ", current->key);
+        printf("[%d][%d] -> ", current ->cell ->coordinates[0], current ->cell ->coordinates[1]);
         current = current->next;
     }
     printf("\n");
