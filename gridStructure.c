@@ -106,9 +106,14 @@ int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     // random ints used to index grid
     int idx[2];
-    generateRandomIndex(idx, grid);
-    int rx = idx[0];
-    int ry = idx[1];
+    int rx;
+    int ry;
+    //Makes sure construction point are not too clustered
+    do {
+        generateRandomIndex(idx, grid);
+        rx = idx[0];
+        ry = idx[1];
+    }while(neighbourChecker(grid,idx));
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[CONSTRUCTION] = TRUE;
@@ -175,4 +180,32 @@ void printCell(Cell *grid[GRID_SIZE][GRID_SIZE])
                    current->cellData[3]);
         }
     }
+}
+int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE],int idx[2]) {
+    int count=0;
+    for (int x = -1; x <= 1; x++) {
+        for (int y = -1; y <= 1; y++) {
+            if (x == 0 && y == 0)
+                continue;
+            int checkX = idx[0] + x;
+            int checkY = idx[1] + y;
+
+            // if the new x and y are valid, then check the neighbour at that location
+            if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE) {
+                Cell *neighbour = grid[checkX][checkY];
+                // if the neighbour is construction, or is in the closed list, then skip iteration
+                if (neighbour->cellData[CONSTRUCTION] == TRUE){
+                    count++;
+                }
+
+            }
+        }
+    }
+    if(count>5){
+        return 1;
+    }
+    else if(count<5){
+        return 0;
+    }
+
 }
