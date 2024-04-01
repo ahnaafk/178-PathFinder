@@ -55,9 +55,9 @@ int deleteNode(LinkedList *list, Node *data)
         Node *previous;
         while (current != NULL)
         {
-            if (current->key == data->key)
+            if (current == data)
             {
-                if (current->key == list->head->key)
+                if (current == list->head)
                 {
                     list->head = current->next;
                     free(current);
