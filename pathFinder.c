@@ -1,19 +1,12 @@
 #include "pathFinder.h"
 #include <math.h>
 
-/*
-Per Buba's structure
-1. Check closest target -> minimize h-cost
-2. if (dest) -> check if we have their passenger? pathfinder(target): go next
-3. if (pass) -> pathfinder(pass);
-*/
-
 void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[])
 {
     // // 1. Check closest target
     // int min; // holder for closest target
     // Cell *minCell = findMinTarget(start, passengers, destinations);
-    // if (minCell[DESTINATION] == TRUE ) {
+    // if (minCell ->[DESTINATION] == TRUE ) {
     //     if (inList(LinkedList, minCell)) pathFinder(grid, start, minCell);
     // } else if (minCell[PASSENGER] == TRUE) pathFinder(grid, start, minCell); 
 }
@@ -30,125 +23,86 @@ Cell *findMinTarget(Cell *start, Cell *passengers[], Cell *destinations[])
 
     // realistically, we shouldn't check both lists and instead check the passengers we DONT have, and the destinations of the passengers we have.
     // TODO for Ethan, figure out a way to take the busList (passengers we have), and create a list with the passengers we don't have, and the destinations of hte passengers that we do have.
-    // int passenger_count = PASSENGER; // TODO for ETHAN: change to the count of the linked list!
-    // int minCost;
-    // Cell *minCell = malloc(sizeof(Cell *));
-    // minCell = passengers[0];
-    // minCost = hCost(start, minCell);
-    // for (int i = 0; i < passenger_count; i++)
-    // {
-    //     Cell *tempCell = passengers[i];
-    //     int tempCost = hCost(start, minCell);
-    //     if (tempCost < minCost)
-    //     {
-    //         minCost = tempCost;
-    //         minCell = tempCell;
-    //     }
-    // }
+    int passenger_count = PASSENGER; // TODO for ETHAN: change to the count of the linked list!
+    int minCost;
+    Cell *minCell = malloc(sizeof(Cell *));
+    minCell = passengers[0];
+    minCost = hCost(start, minCell);
+    for (int i = 0; i < passenger_count; i++)
+    {
+        Cell *tempCell = passengers[i];
+        int tempCost = hCost(start, minCell);
+        if (tempCost < minCost)
+        {
+            minCost = tempCost;
+            minCell = tempCell;
+        }
+    }
 }
 
 // finds a path to a target node, returns the new starting node.
 Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode)
 {
 
-    // // Initialize openSet
-    // Heap *openSet = createHeap();
-    // // Initialize closedSet
-    // // TODO: linked list goes here for closed set!!!!!
+    // Initialize openSet
+    Heap *openSet = createHeap();
+    // Initialize closedSet
+    LinkedList* closedSet = createLinkedList();
 
-    // // Add startNode to open set
-    // pushHeap(openSet, startNode);
+    // Add startNode to open set
+    pushHeap(openSet, startNode);
 
-    // while (openSet->size > 0)
-    // {
-    //     // Take smallest f node or if equal take lowest h
-    //     Cell *currentNode = popHeap(openSet);
+    while (openSet->size > 0)
+    {
+        // Take smallest f node or if equal take lowest h
+        Cell *currentNode = popHeap(openSet);
 
-    //     // TOOD: add current node to closed set (linked list)
+        // add current node to closed set
+        addNode(closedSet, currentNode);
 
-    //     // if the coordinates match between the current node and the target node, we have a match!
-    //     if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
-    //     {
-    //         retracePath(currentNode, targetNode);
-    //         return currentNode; // not sure if we return this.
-    //     }
 
-    //     // get each neighbour of the current node.
-    //     for (int x = -1; x <= 1; x++)
-    //     {
-    //         for (int y = -1; y <= 1; y++)
-    //         {
-    //             if (x == 0 && y == 0)
-    //                 continue;
-    //             int checkX = currentNode->coordinates[0] + x;
-    //             int checkY = currentNode->coordinates[1] + y;
+        // if the coordinates match between the current node and the target node, we have a match!
+        if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
+        {
+            retracePath(currentNode, targetNode);
+            return currentNode; // not sure if we return this.
+        }
 
-    //             // if the new x and y are valid, then check the neighbour at that location
-    //             if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE)
-    //             {
-    //                 Cell *neighbour = grid[checkX][checkY];
-    //                 // if the neighbour is construction, or is in the closed list, then skip iteration
-    //                 if (neighbour->cellData[CONSTRUCTION] == TRUE || isClosed(neighbour))
-    //                     continue;
-
-    //                 // if the new path to neighbour is shorter OR the neighbour is not in the open then...
-
-    //                 // TODO: verify this logic
-    //                 // TODO create the isOpen function once linked list is created.
-    //                 if (gCost(currentNode, neighbour) < neighbour->g_cost || !isOpen(neighbour))
-    //                 {
-    //                     neighbour->f_cost = fCost(startNode, targetNode, neighbour);
-    //                     neighbour->parent = currentNode;
-    //                     if (!isOpen(neighbour))
-    //                         pushHeap(openSet, neighbour);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-}
-
-/*
-        //push neighbours of the popped node to the heap
-        for (int i = 1; i < openSet -> size; i++){
-            openSetF = fCost(startNode, targetNode, openSet[i]);
-            currentF = fCost(startNode, targetNode, currentNode);
-            openSetH = hCost(targetNode, openSet[i]);
-            currentH = hCost(targetNode, currentNode);
-
-            if ( openSetF < currentF || (openSetF == currentF && openSetH < currentH){
-                currentNode = openSet[i];
-            }
-
-            //remove node from openSet and add to closed set
-            remove(currentNode, openSet); FIX THIS
-            add(currentNode, closedSet); FIX THIS
-
-            //Check if current node is target node
-            if (currentNode coordinates == targetNode coordinates){ FIX THIS
-                //retrace path function??
-                return;
-            }
-
-            for (int i = 0; i < 8; i ++){
-                List neighbour = getNeighbours(currentNode);
-
-                if((neighbour[i]->cellData[1] != 1) || neighbour[i] is in closedSet) FIX THIS
+        // get each neighbour of the current node.
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
                     continue;
+                int checkX = currentNode->coordinates[0] + x;
+                int checkY = currentNode->coordinates[1] + y;
 
-                int movingCost = gCost(startNode, currentNode) + getDistance(currentNode, neighbour[i]);
-                if (movingCost < gCost(startNode, neighbour[i]) || open set doesnt contain neighbour[i]){ FIX THIS
-                    neighbour[i]->g = movingCost;                         FIX THIS
-                    neighbour[i]->h = hCost(targetNode, neighbour[i]);    FIX THIS
-                    neighbour[i]->parent = currentNode;                   FIX THIS
+                // if the new x and y are valid, then check the neighbour at that location
+                if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE)
+                {
+                    Cell *neighbour = grid[checkX][checkY];
+                    // if the neighbour is construction, or is in the closed list, then skip iteration
+                    if (neighbour->cellData[CONSTRUCTION] == TRUE || inList(closedSet, neighbour))
+                        continue;
 
-                    if(open set doesnt have neighbour[i])
-                        add neighbour[i] to openSet
+                    // if the new path to neighbour is shorter OR the neighbour is not in the open then...
+
+                    // TODO: verify this logic
+                    // TODO create the isOpen function once linked list is created.
+                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !isOpen(neighbour))
+                    {
+                        neighbour->f_cost = fCost(startNode, targetNode, neighbour);
+                        neighbour->parent = currentNode;
+                        if (!isOpen(neighbour))
+                            pushHeap(openSet, neighbour);
+                    }
                 }
             }
         }
+    }
+}
 
-*/
 void retracePath(Cell *startNode, Cell *endNode)
 {
     // List* path = newList(); FIX THIS
@@ -160,10 +114,6 @@ void retracePath(Cell *startNode, Cell *endNode)
     //}
     // Reverse path now because it's in opposite order
 }
-
-// int isClosed(Cell* node, LinkedList closedList ) {
-//     //check if node is in the closed list.
-// }
 
 int getDistance(Cell *A, Cell *B)
 {
@@ -205,4 +155,23 @@ int hCost(Cell *targetNode, Cell *currentNode)
 int fCost(Cell *startNode, Cell *targetNode, Cell *currentNode)
 {
     return gCost(startNode, currentNode) + hCost(targetNode, currentNode);
+}
+
+int inList(LinkedList* list, Cell* node) {
+    Node* currentNode = list -> head; 
+    for (int i = 0; i < list -> count; i++)
+    {
+        if (currentNode->cell == node) return TRUE;
+        currentNode = currentNode -> next; 
+    }
+    return FALSE;  
+}
+
+int inClosed(Heap* h, Cell* node) {
+    
+    for (int i = 0; i < h ->size; i++)
+    {
+        if (node == h ->arr[i]) return TRUE;
+    }
+    return FALSE;
 }
