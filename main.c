@@ -25,6 +25,10 @@ int main()
     createGrid(grid, masterList);
     printGrid(grid);
 
+    astar(grid, grid[0][0], masterList, listOfPaths);
+
+    // displayList(listOfPaths[0]);
+
     for (int i = 0; i < GRID_SIZE; i++)
     {
         for (int j = 0; j < GRID_SIZE; j++)
