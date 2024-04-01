@@ -8,7 +8,9 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Ce
 
 Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode);
 
-// void retracePath(Cell startNode, Cell endNode);
+void retracePath(Cell *startCell, Cell *endCell, LinkedList* pathList[35]);
+
+void reverseList(LinkedList* list);
 
 int getDistance(Cell* A, Cell* B);
 

@@ -103,17 +103,58 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
     }
 }
 
-void retracePath(Cell *startNode, Cell *endNode)
+void retracePath(Cell *startCell, Cell *endCell, LinkedList* pathList[35])
 {
-    // List* path = newList(); FIX THIS
-    // Cell currentNode = endNode;
+    
+    Cell* currentCell = endCell;
+    LinkedList* tempList; 
+    int i = 0;
+    while (pathList[i] != NULL) i++; //find an empty path within the path list. 
 
-    // while(currentNode != startNode){
-    // add currentNode to path;               FIX THIS
-    // currentNode = currentNode->parent;
-    //}
-    // Reverse path now because it's in opposite order
+    //Create a templist with all the parents of the nodes. Head -> endNode
+    while(currentCell != startCell){
+    addNode(tempList,currentCell);           
+    currentCell = currentCell->parent;
+    }
+
+    //Reverse path now because it's in opposite order. 
+    reverseList(tempList);
+    pathList[i] = tempList;
+    }
+
+void reverseList(LinkedList* list) {
+    Node* prev = NULL;
+    Node* current = list -> head; 
+    Node* next = NULL;
+
+    while (current != NULL) {
+        next = current -> next;
+        current -> next = prev;
+        prev = current;
+        current = next; 
+    }
+
+    list -> head = prev; 
 }
+
+// void reverse(struct Node** head_ref) 
+// { 
+//     struct Node* prev = NULL; 
+//     struct Node* current = *head_ref; 
+//     struct Node* next = NULL; 
+//     while (current != NULL) { 
+//         // Store next 
+//         next = current->next; 
+  
+//         // Reverse current node's pointer 
+//         current->next = prev; 
+  
+//         // Move pointers one position ahead. 
+//         prev = current; 
+//         current = next; 
+//     } 
+//     *head_ref = prev; 
+// } 
 
 int getDistance(Cell *A, Cell *B)
 {
