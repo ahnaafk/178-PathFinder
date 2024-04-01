@@ -10,12 +10,12 @@ Per Buba's structure
 
 void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[])
 {
-    // 1. Check closest target
-    int min; // holder for closest target
-    Cell *minCell = findMinTarget(start, passengers, destinations);
-    if (minCell ->[DESTINATION] == TRUE ) {
-        if (inList(LinkedList, minCell)) pathFinder(grid, start, minCell);
-    } else if (minCell[PASSENGER] == TRUE) pathFinder(grid, start, minCell); 
+    // // 1. Check closest target
+    // int min; // holder for closest target
+    // Cell *minCell = findMinTarget(start, passengers, destinations);
+    // if (minCell ->[DESTINATION] == TRUE ) {
+    //     if (inList(LinkedList, minCell)) pathFinder(grid, start, minCell);
+    // } else if (minCell[PASSENGER] == TRUE) pathFinder(grid, start, minCell); 
 }
 
 // bruh gonna have to cahgne this whole function when the linked list is implemented.
@@ -220,5 +220,10 @@ int inList(LinkedList* list, Cell* node) {
 }
 
 int inClosed(Heap* h, Cell* node) {
-
+    
+    for (int i = 0; i < h ->size; i++)
+    {
+        if (node == h ->arr[i]) return TRUE;
+    }
+    return FALSE;
 }
