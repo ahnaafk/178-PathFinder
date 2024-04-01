@@ -2,29 +2,28 @@
 #include <math.h>
 
 //Finds min target from starting cell, finds shortest path from starting
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList* masterList[4],LinkedList* listOfPaths[35])
-{
-    Cell* startingCell=start;
-    Cell* endingCell;
-     //Loop while targets are still available
-     while(masterList[TARGETLIST]->head!=NULL){
-         //Find the next target
-         endingCell= findMinTarget(startingCell,masterList[TARGETLIST]);
-         //Finds the path to next target and sets the target to new starting cell
-         startingCell=pathFinder(grid,startingCell,endingCell);
-         //If new startingCell is a passenger do the following
-         if(startingCell->cellData[PASSENGER]==1){
-             addNode(masterList[TARGETLIST], startingCell->destination);
-             addNode(masterList[PASSONBUS], startingCell);
-             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS],startingCell));
-             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST],startingCell));
-         //If the new startingCell is a destination do the following
-         }
-         else if(startingCell->cellData[DESTINATION]==1){
-             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST],startingCell));
-             deleteNode(masterList[PASSONBUS],findNode(masterList[PASSONBUS],startingCell));
-         }
-     
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList* masterList[4],LinkedList* listOfPaths[35]) {
+    Cell *startingCell = start;
+    Cell *endingCell;
+    //Loop while targets are still available
+    while (masterList[TARGETLIST]->head != NULL) {
+        //Find the next target
+        endingCell = findMinTarget(startingCell, masterList[TARGETLIST]);
+        //Finds the path to next target and sets the target to new starting cell
+        startingCell = pathFinder(grid, startingCell, endingCell);
+        //If new startingCell is a passenger do the following
+        if (startingCell->cellData[PASSENGER] == 1) {
+            addNode(masterList[TARGETLIST], startingCell->destination);
+            addNode(masterList[PASSONBUS], startingCell);
+            deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
+            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
+            //If the new startingCell is a destination do the following
+        } else if (startingCell->cellData[DESTINATION] == 1) {
+            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
+            deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
+        }
+
+    }
 }
 
 Cell* findMinTarget(Cell* start, LinkedList* targetList)
