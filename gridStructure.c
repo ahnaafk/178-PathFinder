@@ -5,26 +5,27 @@
 #define PASSENGER_COUNT 5
 #define VERBOSE 0
 
-int constructionPoints[CONSTRUCTION_POINTS][2];
-
 enum EXIT
 {
     EXIT_OK,
     EXIT_ERR
 };
 
+int constructionPoints[CONSTRUCTION_POINTS][2];
+
 void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     // method to generate random integers between 1 and N that i found online.
     // random ints used to index grid
-    int x ;
-    int y ;
+    int x;
+    int y;
 
     // If the indexed cell is NOT an open space, then we cannot turn it into something else.
-    do{
+    do
+    {
         x = rand() % (GRID_SIZE);
         y = rand() % (GRID_SIZE);
-    }while ((x == 0 && y == 0) || (grid[x][y] && grid[x][y]->cellData[OPEN] == FALSE));
+    } while ((x == 0 && y == 0) || (grid[x][y] && grid[x][y]->cellData[OPEN] == FALSE));
 
     array[0] = x;
     array[1] = y;
@@ -63,10 +64,10 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
     }
 
     // randomly create construction points along grid
-
-    for (int i = 0; i < CONSTRUCTION_POINTS; i++) {
-        //figure out how to avoid the boxed in edge-case
-        createConstruction(grid, i);       
+    for (int i = 0; i < CONSTRUCTION_POINTS; i++)
+    {
+        // figure out how to avoid the boxed in edge-case
+        createConstruction(grid);
     }
 
     // // create random passenger destination pairs.
@@ -79,7 +80,6 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
         addNode(masterList[IDLEPASS], pass);
         addNode(masterList[TARGETLIST], pass);
         Cell *dest = createDestination(grid);
-        addNode(masterList[ALLDEST], dest);
 
         // //populate the array with the pairs for ease of accessk
         // passArr[i] = pass;
@@ -105,19 +105,20 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
 }
 
 // Randomly generate a construction point within the grid.
-
-int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i) {
+int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i)
+{
 
     // random ints used to index grid
     int idx[2];
     int rx;
     int ry;
-    //Makes sure construction point are not too clustered
-    do {
+    // Makes sure construction point are not too clustered
+    do
+    {
         generateRandomIndex(idx, grid);
         rx = idx[0];
         ry = idx[1];
-    }while(neighbourChecker(grid,idx));
+    } while (neighbourChecker(grid, idx));
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[CONSTRUCTION] = TRUE;
@@ -132,10 +133,21 @@ int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i) {
 Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     int idx[2];
-    generateRandomIndex(idx, grid);
+    // generateRandomIndex(idx, grid);
+
+    do
+    {
+        printf("Please input the coordinates of passenger: ");
+        scanf("%d %d", idx[0], idx[1]);
+        if (checkConstruction(constructionPoints, idx[0], idx[1]))
+        {
+            printf("Please input the coordinates of passenger: ");
+            scanf("%d %d", idx[0], idx[1]);
+        }
+    } while (idx[0] == 0 && idx[1] == 0);
+
     int rx = idx[0];
     int ry = idx[1];
-
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[PASSENGER] = TRUE;
@@ -147,10 +159,21 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
 Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     int idx[2];
-    generateRandomIndex(idx, grid);
-    int rx = idx[0];
+    // generateRandomIndex(idx, grid);
+    do
+    {
+        printf("Please input the coordinates of passenger: ");
+        scanf("%d %d", idx[0], idx[1]);
+        if (checkConstruction(constructionPoints, idx[0], idx[1]))
+        {
+            printf("Please input the coordinates of passenger: ");
+            scanf("%d %d", idx[0], idx[1]);
+        }
+    } while (idx[0] == 0 && idx[1] == 0);
+
+        int rx = idx[0];
     int ry = idx[1];
-    
+
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[DESTINATION] = TRUE;
 
@@ -188,31 +211,46 @@ void printCell(Cell *grid[GRID_SIZE][GRID_SIZE])
         }
     }
 }
-int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE],int idx[2]) {
-    int count=0;
-    for (int x = -1; x <= 1; x++) {
-        for (int y = -1; y <= 1; y++) {
+int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE], int idx[2])
+{
+    int count = 0;
+    for (int x = -1; x <= 1; x++)
+    {
+        for (int y = -1; y <= 1; y++)
+        {
             if (x == 0 && y == 0)
                 continue;
             int checkX = idx[0] + x;
             int checkY = idx[1] + y;
 
             // if the new x and y are valid, then check the neighbour at that location
-            if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE) {
+            if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE)
+            {
                 Cell *neighbour = grid[checkX][checkY];
                 // if the neighbour is construction, or is in the closed list, then skip iteration
-                if (neighbour->cellData[CONSTRUCTION] == TRUE){
+                if (neighbour->cellData[CONSTRUCTION] == TRUE)
+                {
                     count++;
                 }
-
             }
         }
     }
-    if(count>5){
+    if (count > 5)
+    {
         return 1;
     }
-    else if(count<5){
+    else if (count < 5)
+    {
         return 0;
     }
+}
 
+int checkConstruction(int construction[30][2], int x, int y)
+{
+    for (int i = 0; i < 30; i++)
+    {
+        if (construction[i][0] == x && construction[i][1] == y)
+            return TRUE;
+    }
+    return FALSE;
 }
