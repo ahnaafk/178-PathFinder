@@ -77,7 +77,6 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
         addNode(masterList[IDLEPASS], pass);
         addNode(masterList[TARGETLIST], pass);
         Cell *dest = createDestination(grid);
-        addNode(masterList[ALLDEST], dest);
 
         // //populate the array with the pairs for ease of accessk
         // passArr[i] = pass;

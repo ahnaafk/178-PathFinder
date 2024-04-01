@@ -15,8 +15,8 @@ int main()
     masterList[PASSONBUS] = passOnBus;
     LinkedList *idlePass = createLinkedList();
     masterList[IDLEPASS] = idlePass;
-    LinkedList *allDest = createLinkedList();
-    masterList[ALLDEST] = allDest;
+    LinkedList *changeLog = createLinkedList();
+    masterList[CHANGELOG] = changeLog;
     LinkedList *targetList = createLinkedList();
     masterList[TARGETLIST] = targetList;
     // Creates List of paths
@@ -24,6 +24,7 @@ int main()
 
     createGrid(grid, masterList);
     printGrid(grid);
+    LinkedList *routeInfo = createLinkedList();
 
     astar(grid, grid[0][0], masterList, listOfPaths);
 

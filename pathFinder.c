@@ -18,9 +18,10 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList
         // Passenger pickup routine:
         if (startingCell->cellData[PASSENGER] == 1)
         {
-            // Add the passenger's destination to the target list and add the passenger to the buslist
+            // Add the passenger's destination to the target list, add the passenger to the buslist add passenger to changelog
             addNode(masterList[TARGETLIST], startingCell->destination);
             addNode(masterList[PASSONBUS], startingCell);
+            addNode(masterList[CHANGELOG], startingCell);
 
             // Delete the passenger from the idlelist and delete it from the target list.
             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
@@ -29,9 +30,10 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList
         // Passenger dropoff routine
         else if (startingCell->cellData[DESTINATION] == 1)
         {
-            // Delete the destination off of the target list and delete the passenger from the bus list .
+            // Delete the destination off of the target list and delete the passenger from the bus list, Add destination to change log.
             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
             deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
+            addNode(masterList[CHANGELOG], startingCell);
         }
     }
 }
