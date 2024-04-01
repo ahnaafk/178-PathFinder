@@ -5,7 +5,8 @@
 #include <Arduino.h>
 #include <stdio.h>
 #include <LiquidCrystal.h>
-#include "linkedList.h"
+#include "pathFinder.h"
+
 
 //LCD screen parameters
 #define LCD_WIDTH    16
@@ -43,9 +44,10 @@ int numberHandling(LiquidCrystal *lcd);
 void Check(LiquidCrystal *lcd);
 
 //handles insertion of the coordinates
-int insertCoordHandle(LiquidCrystal *lcd);
+int insertCoordsHandle(LiquidCrystal *lcd);
 
 
+int performAstar
 
 
 #endif 

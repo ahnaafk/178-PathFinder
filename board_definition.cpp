@@ -1,10 +1,6 @@
 #include "board_definition.h"
-#include "pathFinder.h"
-#include "linkedList.h"
-#include "gridStructure.h"
 
 buttonOps button;
-int passengerCount = 0;
 
 
 void Check() {
@@ -143,40 +139,43 @@ int numberHandling(LiquidCrystal *lcd){
   }
 }
 
-int insertCoordsHandle(LiquidCrystal *lcd){
-  int comparing;
-  int output;
+int insertCoordsHandle(LiquidCrystal *lcd, int locationsArr[2]){
   int pickup, dropoff;
-  
+
+  lcd->clear();
   lcd->setCursor(0,0);
   lcd->print("Pickup:");
   
   pickup = numberHandling(lcd);
-  comparing = compareCoord(pickup, //array of randomized points// );
 
-
-  if (comparing == EXIT_TRUE){ //pickup coord is construction point
-    lcd->setCursor(0, 0);
-    lcd->print("Invalid pickup");
-    insertCoordsHandle(lcd);
-  }
-  
-  else{ //pickup coord is not construction point, move on to dropoff coord
-    lcd->setCursor(0, 0);
-    lcd->print("Dropoff:");
-    
-    dropoff = numberHandling(lcd);
-    comparing = compareCoord(dropoff, //array of randomized points// ); 
-
-    if(comparing == EXIT_TRUE){ //dropoff coord is construction point
+  for (int i = 0; i < CONSTRUCTION_POINTS, i++){
+    if(pickup == constructionPoints[i][0] * 10 + constructionPoints[i][1]){
+      lcd->clear();
       lcd->setCursor(0, 0);
-      lcd->print("Invalid dropoff");
-      insertCoordsHandle(lcd);
+      lcd->print("Invalid pickup.");
+      delay(2000);
+      return EXIT_FAIL;
     }
-
-    else{ //dropoff coord is not construction point
-      //discuss what to do from here
-      //recall menu function
   }
+
+  lcd->clear();
+  lcd->setCursor(0, 0);
+  lcd->print("Dropoff:");
+
+  dropoff = numberHandling(lcd);
+
+  for (int i = 0; i < CONSTRUCTION_POINTS, i++){
+    if(dropoff == constructionPoints[i][0] * 10 + constructionPoints[i][1]){
+      lcd->clear();
+      lcd->setCursor(0, 0);
+      lcd->print("Invalid dropoff.");
+      delay(2000);
+      return EXIT_FAIL;
+  }
+
+  locationsArr[0] = pickup;
+  locationsArr[1] = dropoff;
+
+  return EXIT_OK;
  
 }
