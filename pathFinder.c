@@ -90,7 +90,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
                 {
                     Cell *neighbour = grid[checkX][checkY];
                     // if the neighbour is construction, or is in the closed list, then skip iteration
-                    if (neighbour->cellData[CONSTRUCTION] == TRUE || inList(closed_set, neighbour))
+                    if (neighbour->cellData[CONSTRUCTION] == TRUE || inList(closedSet, neighbour))
                         continue;
 
                     // if the new path to neighbour is shorter OR the neighbour is not in the open then...
@@ -209,12 +209,12 @@ int fCost(Cell *startNode, Cell *targetNode, Cell *currentNode)
     return gCost(startNode, currentNode) + hCost(targetNode, currentNode);
 }
 
-int inList(LinkedList list, Cell* node) {
-    Node* currentNode = list.head; 
-    for (int i = 0; i < list.count; i++)
+int inList(LinkedList* list, Cell* node) {
+    Node* currentNode = list -> head; 
+    for (int i = 0; i < list -> count; i++)
     {
         if (currentNode->cell == node) return TRUE;
-        currentNode = currentNode ->next; 
+        currentNode = currentNode -> next; 
     }
     return FALSE;  
 }
