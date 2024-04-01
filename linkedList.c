@@ -68,10 +68,10 @@ int deleteNode(LinkedList* list, Node* data) {
 }
 
 // Function to find a node with given data in the linked list
-Node* findNode(LinkedList* list, int key) {
+Node* findNode(LinkedList* list, Cell* cell) {
     Node* current = list->head;
     while (current != NULL) {
-        if (current->key == key) {
+        if (current->cell == cell) {
             return current; // Node found
         }
         current = current->next;

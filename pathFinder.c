@@ -8,20 +8,34 @@ Per Buba's structure
 3. if (pass) -> pathfinder(pass);
 */
 
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, Cell *passengers[], Cell *destinations[])
+//Finds min target from starting cell, finds shortest path from starting
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start,LinkedList* masterList[4],LinkedList* listOfPaths[35])
 {
-    // // 1. Check closest target
-    // int min; // holder for closest target
-    // Cell *minCell = findMinTarget(start, passengers, destinations);
-    // if (minCell[DESTINATION] == TRUE ) {
-    //     if (inList(LinkedList, minCell)) pathFinder(grid, start, minCell);
-    // } else if (minCell[PASSENGER] == TRUE) pathFinder(grid, start, minCell); 
+    Cell* startingCell=start;
+    Cell* endingCell;
+     //Loop while targets are still available
+     while(masterList[TARGETLIST]->head!=NULL){
+         //Find the next target
+         endingCell= findMinTarget(startingCell,masterList[TARGETLIST]);
+         //Finds the path to next target and sets the target to new starting cell
+         startingCell=pathFinder(grid,startingCell,endingCell);
+         //If new startingCell is a passenger do the following
+         if(startingCell->cellData[PASSENGER]==1){
+             addNode(masterList[TARGETLIST], startingCell->destination);
+             addNode(masterList[PASSONBUS], startingCell);
+             deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS],startingCell));
+             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST],startingCell));
+         //If the new startingCell is a destination do the following
+         }
+         else if(startingCell->cellData[DESTINATION]==1){
+             deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST],startingCell));
+             deleteNode(masterList[PASSONBUS],findNode(masterList[PASSONBUS],startingCell));
+         }
+     }
 }
 
-// bruh gonna have to cahgne this whole function when the linked list is implemented.
-// check both lists for the minimum h-cost.
 
-Cell *findMinTarget(Cell *start, Cell *passengers[], Cell *destinations[])
+Cell* findMinTarget(Cell* start, LinkedList* targetList)
 {
 
     // possible objectives
@@ -30,21 +44,23 @@ Cell *findMinTarget(Cell *start, Cell *passengers[], Cell *destinations[])
 
     // realistically, we shouldn't check both lists and instead check the passengers we DONT have, and the destinations of the passengers we have.
     // TODO for Ethan, figure out a way to take the busList (passengers we have), and create a list with the passengers we don't have, and the destinations of hte passengers that we do have.
-    // int passenger_count = PASSENGER; // TODO for ETHAN: change to the count of the linked list!
-    // int minCost;
-    // Cell *minCell = malloc(sizeof(Cell *));
-    // minCell = passengers[0];
-    // minCost = hCost(start, minCell);
-    // for (int i = 0; i < passenger_count; i++)
-    // {
-    //     Cell *tempCell = passengers[i];
-    //     int tempCost = hCost(start, minCell);
-    //     if (tempCost < minCost)
-    //     {
-    //         minCost = tempCost;
-    //         minCell = tempCell;
-    //     }
-    // }
+    Cell* minTarget=NULL;
+    int minHCost;
+    Node* traverser=targetList->head;
+    while(traverser!=NULL){
+        if(traverser==targetList->head){
+            minHCost=hCost(traverser->cell,start);
+            minTarget= traverser->cell;
+        }
+        else{
+            if(hCost(traverser->cell,start)<minHCost){
+                minHCost=hCost(traverser->cell,start);
+                minTarget= traverser->cell;
+            }
+        }
+        traverser=traverser->next;
+    }
+    return(minTarget);
 }
 
 // finds a path to a target node, returns the new starting node.

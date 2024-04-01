@@ -12,17 +12,17 @@ int main()
 
 
     //Creates List of Lists
-    LinkedList* masterList [5];
+    LinkedList* masterList [4];
     LinkedList* passOnBus =createLinkedList();
-    masterList [0]=passOnBus;
+    masterList [PASSONBUS]=passOnBus;
     LinkedList* idlePass =createLinkedList();
-    masterList [1]=idlePass;
+    masterList [IDLEPASS]=idlePass;
     LinkedList* allDest =createLinkedList();
-    masterList [2]= allDest;
-    LinkedList* idleAndDestOnBus =createLinkedList();
-    masterList [3]= idleAndDestOnBus;
-    LinkedList* pathToTrgt =createLinkedList();
-    masterList [4]= pathToTrgt;
+    masterList [ALLDEST]= allDest;
+    LinkedList* targetList =createLinkedList();
+    masterList [TARGETLIST]= targetList;
+    //Creates List of paths
+    LinkedList* listOfPaths[35];
 
 
     createGrid(grid,masterList);
