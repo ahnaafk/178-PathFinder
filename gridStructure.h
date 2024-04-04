@@ -30,5 +30,7 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE]);
 
 int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE],int idx[2]);
 
+int isValid(Cell *grid[GRID_SIZE][GRID_SIZE], int x, int y);
+
 // TODO: Create a passenger pickup function which frees the pointer to the passenger.
 // TODO: Create a clear destination function which frees the pointer to the destination

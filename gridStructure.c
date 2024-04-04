@@ -66,9 +66,9 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
     {
         Cell *pass = createPassenger(grid);
         addNode(masterList[IDLEPASS], pass);
-
         // each passenger on the board is also a valid target.
         addNode(masterList[TARGETLIST], pass);
+
         Cell *dest = createDestination(grid);
 
         // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
@@ -127,7 +127,7 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
             rx = idx[0];
             ry = idx[1];
 
-        } while ((idx[0] == 0 && idx[1] == 0) || (grid[idx[0]][idx[1]]->cellData[CONSTRUCTION] == TRUE));
+        } while (!isValid(grid, rx, ry));
     }
     else // for presentation set random to 0 so we can take user input.
     {
@@ -136,11 +136,14 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
             printf("Please input the coordinates of passenger: ");
             scanf("%d %d", &rx, &ry);
 
-            // if the passenger is set at 0,0 or the cell is already a construction point, reprompt.
-            if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
+            // if the cell is not valid, reprompt
+            if (!isValid(grid, rx, ry))
+            {
                 printf("Invalid input \n");
+                continue;
+            }
 
-        } while ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE));
+        } while (!isValid(grid, rx, ry));
     }
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
@@ -164,7 +167,7 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
             rx = idx[0];
             ry = idx[1];
 
-        } while ((idx[0] == 0 && idx[1] == 0) || (grid[idx[0]][idx[1]]->cellData[CONSTRUCTION] == TRUE));
+        } while (!isValid(grid, rx, ry));
     }
     else // for presentation set random to 0 so we can take user input.
     {
@@ -174,10 +177,13 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
             scanf("%d %d", &rx, &ry);
 
             // if the destination is set at 0,0 or the cell is already a construction point, reprompt.
-            if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
+            if (!isValid(grid, rx, ry))
+            {
                 printf("Invalid input \n");
+                continue;
+            }
 
-        } while ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE));
+        } while (!isValid(grid, rx, ry));
     }
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
@@ -217,6 +223,17 @@ void printCell(Cell *grid[GRID_SIZE][GRID_SIZE])
         }
     }
 }
+
+int isValid(Cell *grid[GRID_SIZE][GRID_SIZE], int x, int y)
+{
+    int valid = TRUE;
+    if (grid[x][y]->cellData[OPEN] == FALSE)
+        valid = FALSE;
+    if (x == 0 && y == 0)
+        valid = FALSE;
+    return valid;
+}
+
 int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE], int idx[2])
 {
     int count = 0;
@@ -233,7 +250,7 @@ int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE], int idx[2])
             if (checkX >= 0 && checkX < GRID_SIZE && checkY >= 0 && checkY < GRID_SIZE)
             {
                 Cell *neighbour = grid[checkX][checkY];
-                // if the neighbour is construction, or is in the closed list, then skip iteration
+                // if the neighbour is construction, then increase the count.
                 if (neighbour->cellData[CONSTRUCTION] == TRUE)
                 {
                     count++;
