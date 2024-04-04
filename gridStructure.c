@@ -4,6 +4,7 @@
 #define CONSTRUCTION_POINTS 30
 #define PASSENGER_COUNT 5
 #define VERBOSE 0
+#define RANDOM 0
 
 enum EXIT
 {
@@ -11,12 +12,9 @@ enum EXIT
     EXIT_ERR
 };
 
-int constructionPoints[CONSTRUCTION_POINTS][2];
-
 void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     // method to generate random integers between 1 and N that i found online.
-    // random ints used to index grid
     int x;
     int y;
 
@@ -34,8 +32,6 @@ void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE])
 void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
 {
     // initalize each part of the grid to an open space by default
-    // Cell grid[GRID_SIZE][GRID_SIZE];
-    printf("-----at initalization\n");
 
     for (int i = 0; i < GRID_SIZE; i++)
     {
@@ -50,40 +46,30 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
                 exit(EXIT_ERR);
             }
 
-            // printf("checkpoint 0, i: %d, j: %d \n", i, j);
-
             grid[i][j]->coordinates[0] = i;
             grid[i][j]->coordinates[1] = j;
             grid[i][j]->cellData[OPEN] = 1;
             grid[i][j]->cellData[CONSTRUCTION] = 0;
             grid[i][j]->cellData[PASSENGER] = 0;
             grid[i][j]->cellData[DESTINATION] = 0;
-            // printf("cellData: [%d,%d,%d,%d] \n", grid[i][j]->cellData[0], grid[i][j]->cellData[1], grid[i][j]->cellData[2], grid[i][j]->cellData[3]);
-            // printf("coordinates of cell[%d][%d]: [%d][%d] \n", i,j, grid[i][j] -> coordinates[0], grid[i][j] -> coordinates[1]);
         }
     }
 
     // randomly create construction points along grid
     for (int i = 0; i < CONSTRUCTION_POINTS; i++)
     {
-        // figure out how to avoid the boxed in edge-case
-        createConstruction(grid);
+        createConstruction(grid, i);
     }
 
     // // create random passenger destination pairs.
-    // Cell* destArr[PASSENGER_COUNT];
-    // Cell* passArr[PASSENGER_COUNT];
     for (int i = 0; i < PASSENGER_COUNT; i++)
     {
-        // TODO for ETHAN: each time we create a passenger, also must add the pair to a linked list. Done
         Cell *pass = createPassenger(grid);
         addNode(masterList[IDLEPASS], pass);
+
+        // each passenger on the board is also a valid target.
         addNode(masterList[TARGETLIST], pass);
         Cell *dest = createDestination(grid);
-
-        // //populate the array with the pairs for ease of accessk
-        // passArr[i] = pass;
-        // destArr[i] = dest;
 
         // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
         pass->destination = dest;
@@ -123,9 +109,6 @@ int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i)
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[CONSTRUCTION] = TRUE;
 
-    constructionPoints[i][0] = rx;
-    constructionPoints[i][1] = ry;
-
     return EXIT_OK;
 }
 
@@ -133,21 +116,32 @@ int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i)
 Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     int idx[2];
-    // generateRandomIndex(idx, grid);
-
-    do
-    {
-        printf("Please input the coordinates of passenger: ");
-        scanf("%d %d", idx[0], idx[1]);
-        if (checkConstruction(constructionPoints, idx[0], idx[1]))
-        {
-            printf("Please input the coordinates of passenger: ");
-            scanf("%d %d", idx[0], idx[1]);
-        }
-    } while (idx[0] == 0 && idx[1] == 0);
-
     int rx = idx[0];
     int ry = idx[1];
+
+    if (RANDOM == TRUE) // if we are testing, use the random toolset for ease.
+    {
+        do
+        {
+            generateRandomIndex(idx, grid);
+            rx = idx[0];
+            ry = idx[1];
+
+        } while ((idx[0] == 0 && idx[1] == 0) || (grid[idx[0]][idx[1]]->cellData[CONSTRUCTION] == TRUE));
+    }
+    else // for presentation set random to 0 so we can take user input.
+    {
+        do
+        {
+            printf("Please input the coordinates of passenger: ");
+            scanf("%d %d", rx, ry);
+
+            // if the passenger is set at 0,0 or the cell is already a construction point, reprompt.
+            if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
+                printf("Invalid input \n");
+
+        } while ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE));
+    }
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[PASSENGER] = TRUE;
@@ -159,20 +153,32 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
 Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
     int idx[2];
-    // generateRandomIndex(idx, grid);
-    do
-    {
-        printf("Please input the coordinates of passenger: ");
-        scanf("%d %d", idx[0], idx[1]);
-        if (checkConstruction(constructionPoints, idx[0], idx[1]))
-        {
-            printf("Please input the coordinates of passenger: ");
-            scanf("%d %d", idx[0], idx[1]);
-        }
-    } while (idx[0] == 0 && idx[1] == 0);
-
-        int rx = idx[0];
+    int rx = idx[0];
     int ry = idx[1];
+
+    if (RANDOM == TRUE) // if we are testing, use the random toolset for ease.
+    {
+        do
+        {
+            generateRandomIndex(idx, grid);
+            rx = idx[0];
+            ry = idx[1];
+
+        } while ((idx[0] == 0 && idx[1] == 0) || (grid[idx[0]][idx[1]]->cellData[CONSTRUCTION] == TRUE));
+    }
+    else // for presentation set random to 0 so we can take user input.
+    {
+        do
+        {
+            printf("Please input the coordinates of destination: ");
+            scanf("%d %d", rx, ry);
+
+            // if the destination is set at 0,0 or the cell is already a construction point, reprompt.
+            if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
+                printf("Invalid input \n");
+
+        } while ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE));
+    }
 
     grid[rx][ry]->cellData[OPEN] = FALSE;
     grid[rx][ry]->cellData[DESTINATION] = TRUE;
@@ -182,9 +188,9 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
 
 void printGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
-    for (int i = 0; i < GRID_SIZE; i++)
+    for (int i = GRID_SIZE; i > 0; i--)
     {
-        for (int j = 0; j < GRID_SIZE; j++)
+        for (int j = GRID_SIZE; j > 0; j--)
         {
             if (grid[i][j]->cellData[OPEN] == TRUE)
                 printf("0");
@@ -237,20 +243,10 @@ int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE], int idx[2])
     }
     if (count > 5)
     {
-        return 1;
+        return TRUE;
     }
     else if (count < 5)
     {
-        return 0;
+        return FALSE;
     }
-}
-
-int checkConstruction(int construction[30][2], int x, int y)
-{
-    for (int i = 0; i < 30; i++)
-    {
-        if (construction[i][0] == x && construction[i][1] == y)
-            return TRUE;
-    }
-    return FALSE;
 }
