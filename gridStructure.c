@@ -58,7 +58,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
     // randomly create construction points along grid
     for (int i = 0; i < CONSTRUCTION_POINTS; i++)
     {
-        createConstruction(grid, i);
+        createConstruction(grid);
     }
 
     // // create random passenger destination pairs.
@@ -91,7 +91,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
 }
 
 // Randomly generate a construction point within the grid.
-int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE], int i)
+int createConstruction(Cell *grid[GRID_SIZE][GRID_SIZE])
 {
 
     // random ints used to index grid
@@ -134,7 +134,7 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE])
         do
         {
             printf("Please input the coordinates of passenger: ");
-            scanf("%d %d", rx, ry);
+            scanf("%d %d", &rx, &ry);
 
             // if the passenger is set at 0,0 or the cell is already a construction point, reprompt.
             if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
@@ -171,7 +171,7 @@ Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE])
         do
         {
             printf("Please input the coordinates of destination: ");
-            scanf("%d %d", rx, ry);
+            scanf("%d %d", &rx, &ry);
 
             // if the destination is set at 0,0 or the cell is already a construction point, reprompt.
             if ((rx == 0 && ry == 0) || (grid[rx][ry]->cellData[CONSTRUCTION] == TRUE))
@@ -249,4 +249,5 @@ int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE], int idx[2])
     {
         return FALSE;
     }
+    return FALSE;
 }
