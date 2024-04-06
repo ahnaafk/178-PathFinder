@@ -4,7 +4,7 @@
 #define CONSTRUCTION_POINTS 30
 #define PASSENGER_COUNT 5 // used for random passenger-destination creation
 #define VERBOSE 0         // for debugging
-#define RANDOM 1          // set to 1 if you want random passenger-destination pairs.
+#define RANDOM 0          // set to 1 if you want random passenger-destination pairs.
 
 enum EXIT
 {
