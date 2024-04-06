@@ -150,9 +150,9 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
             }
         }
     }
-    // free(openSet);
-    // free(closedSet);
-    printf("Null pathh from start. Likely boxed in \n");
+    free(openSet);
+    free(closedSet);
+    printf("Null path. Likely boxed in \n");
     return NULL;
 }
 

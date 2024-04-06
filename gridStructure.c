@@ -76,12 +76,9 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
         int go_next = FALSE;
         do
         {
-            // input = 1;
             printf("There are/is currently %d passenger-destination pair(s) \n", masterList[TARGETLIST]->count);
             printf("Please input 1 to create a passenger-destination pair, or 2 to continue to pathfinding: ");
             scanf("%d", &input);
-
-            printf("input: %d \n", input);
 
             if (input == 1)
             {

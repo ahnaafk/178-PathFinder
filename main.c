@@ -21,7 +21,6 @@ int main()
     createGrid(grid, masterList);
     printf("Initial grid: \n");
     printGrid(grid);
-    LinkedList *routeInfo = createLinkedList();
 
     int status = astar(grid, grid[0][0], masterList, pathList);
 
