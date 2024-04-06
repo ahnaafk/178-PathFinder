@@ -1,8 +1,3 @@
-// #define PASSONBUS 0
-// #define IDLEPASS 1
-// #define ALLDEST 2
-// #define TARGETLIST 3
-
 enum masterlist {
     BUSLIST,
     TARGETLIST,
