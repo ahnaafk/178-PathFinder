@@ -1,7 +1,12 @@
-#define PASSONBUS 0
-#define IDLEPASS 1
-#define ALLDEST 2
-#define TARGETLIST 3
+// #define PASSONBUS 0
+// #define IDLEPASS 1
+// #define ALLDEST 2
+// #define TARGETLIST 3
+
+enum masterlist {
+    BUSLIST,
+    TARGETLIST,
+};
 
 // Define the structure for the node in the linked list
 typedef struct cell

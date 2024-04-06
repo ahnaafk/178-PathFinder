@@ -10,22 +10,22 @@ int main()
     Cell *grid[GRID_SIZE][GRID_SIZE];
 
     // Creates List of Lists
-    LinkedList *masterList[4];
-    LinkedList *passOnBus = createLinkedList();
-    masterList[PASSONBUS] = passOnBus;
-    LinkedList *idlePass = createLinkedList();
-    masterList[IDLEPASS] = idlePass;
-    LinkedList *allDest = createLinkedList();
-    masterList[ALLDEST] = allDest;
-    LinkedList *targetList = createLinkedList();
-    masterList[TARGETLIST] = targetList;
-    // Creates List of paths
-    LinkedList *listOfPaths[35];
+    LinkedList *masterList[2];
+
+    masterList[BUSLIST] = createLinkedList();
+    masterList[TARGETLIST] = createLinkedList();
+
+    // Creates List of all successful paths taken. maximum 35 paths to be taken. since there are only 70 free spots on the grid. 
+    LinkedList *pathList[34];
 
     createGrid(grid, masterList);
+    printf("Initial grid: \n");
     printGrid(grid);
 
-    astar(grid, grid[0][0], masterList, listOfPaths);
+    astar(grid, grid[0][0], masterList, pathList);
+
+    printf("No more passengers to drop off! We are done here. \n");
+    
 
     for (int i = 0; i < GRID_SIZE; i++)
     {
@@ -35,5 +35,9 @@ int main()
             free(grid[i][j]);
         }
     }
+
+    free(masterList[TARGETLIST]);
+    free(masterList[BUSLIST]);
+
     return 0;
 }

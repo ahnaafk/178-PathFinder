@@ -4,7 +4,7 @@
 #define CONSTRUCTION_POINTS 30
 #define PASSENGER_COUNT 5 // used for random passenger-destination creation
 #define VERBOSE 0         // for debugging
-#define RANDOM 0          // set to 1 if you want random passenger-destination pairs.
+#define RANDOM 1          // set to 1 if you want random passenger-destination pairs.
 
 enum EXIT
 {
@@ -54,60 +54,79 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
     }
 
     // create random passenger destination pairs.
-    int input = 0;
-    int go_next = FALSE;
-    do
+    if (RANDOM == TRUE)
     {
-        // input = 1;
-        printf("There are/is currently %d passenger-destination pair(s) \n", masterList[IDLEPASS]->count);
-        printf("Please input 1 to create a passenger-destination pair, or 2 to continue to pathfinding: ");
-        scanf("%d", &input);
-
-        printf("input: %d \n", input);
-
-        if (input == 1)
+        for (int i = 0; i < PASSENGER_COUNT; i++)
         {
-            Cell *pass = createPassenger(grid);
-            addNode(masterList[IDLEPASS], pass);
-            // each passenger on the board is also a valid target.
-            addNode(masterList[TARGETLIST], pass);
+        Cell *pass = createPassenger(grid);
 
-            Cell *dest = createDestination(grid);
+        // each passenger on the grid is a valid target.
+        addNode(masterList[TARGETLIST], pass);
 
-            // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
-            pass->destination = dest;
-            dest->passenger = pass;
+        Cell *dest = createDestination(grid);
 
-            // set verbose to true when debugging.
-            if (VERBOSE == TRUE)
-            {
-                printf("destination: [%d][%d] \n", dest->coordinates[0], dest->coordinates[1]);
-                printf("passenger: [%d][%d] \n", pass->coordinates[0], pass->coordinates[1]);
-                printf("destination referencing the passenger: [%d][%d] \n", dest->passenger->coordinates[0],
-                       dest->passenger->coordinates[1]);
-                printf("passenger referencing the destination: [%d][%d] \n", pass->destination->coordinates[0],
-                       pass->destination->coordinates[1]);
-            }
+        // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
+        pass->destination = dest;
+        dest->passenger = pass;
         }
-        else if (input == 2)
+    }
+    else
+    {
+        int input = 0;
+        int go_next = FALSE;
+        do
         {
-            // check first that the lists aren't empty before exiting.
-            if (masterList[IDLEPASS]->count == 0)
+            // input = 1;
+            printf("There are/is currently %d passenger-destination pair(s) \n", masterList[TARGETLIST]->count);
+            printf("Please input 1 to create a passenger-destination pair, or 2 to continue to pathfinding: ");
+            scanf("%d", &input);
+
+            printf("input: %d \n", input);
+
+            if (input == 1)
             {
-                printf("Oops! You silly billy, you didn't input a passenger-destination pair. Please do so now. \n");
+                Cell *pass = createPassenger(grid);
+
+                // each passenger on the grid is a valid target.
+                addNode(masterList[TARGETLIST], pass);
+
+                Cell *dest = createDestination(grid);
+
+                // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
+                pass->destination = dest;
+                dest->passenger = pass;
+
+                // set verbose to true when debugging.
+                if (VERBOSE == TRUE)
+                {
+                    printf("destination: [%d][%d] \n", dest->coordinates[0], dest->coordinates[1]);
+                    printf("passenger: [%d][%d] \n", pass->coordinates[0], pass->coordinates[1]);
+                    printf("destination referencing the passenger: [%d][%d] \n", dest->passenger->coordinates[0],
+                           dest->passenger->coordinates[1]);
+                    printf("passenger referencing the destination: [%d][%d] \n", pass->destination->coordinates[0],
+                           pass->destination->coordinates[1]);
+                }
+            }
+            else if (input == 2)
+            {
+                // check first that the lists aren't empty before exiting.
+                if (masterList[TARGETLIST]->count == 0)
+                {
+                    printf("Oops! You silly billy, you didn't input a passenger-destination pair. Please do so now. \n");
+                }
+                else
+                {
+                    // if lists have something in them, then continue.
+                    go_next = TRUE;
+                }
             }
             else
             {
-                // if lists have something in them, then continue.
-                go_next = TRUE;
+                printf("Oops! You silly billy, that's an invalid input \n");
             }
-        }
-        else
-        {
-            printf("Oops! You silly billy, that's an invalid input \n");
-        }
 
-    } while (go_next == FALSE);
+        } while (go_next == FALSE);
+    }
 
     return;
 }

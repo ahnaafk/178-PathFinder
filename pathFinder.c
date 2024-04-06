@@ -1,38 +1,58 @@
 #include "pathFinder.h"
 #include <math.h>
+int pathCount = 0; 
 
 // Finds min target from starting cell, finds shortest path from starting
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *listOfPaths[35])
+void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
 {
-    Cell *startingCell = start;
+    Cell *busCell = start;
     Cell *targetCell;
     // Loop while targets are still available
     while (masterList[TARGETLIST]->head != NULL)
     {
-        // Find the next target
-        targetCell = findMinTarget(startingCell, masterList[TARGETLIST]);
+        //Set the current cell where the bus is to an open space since it'll move to its new destination.
+        busCell -> cellData[BUS] = FALSE;
+        busCell -> cellData[OPEN] = TRUE;
 
-        // Finds the path to next target and sets the target to new starting cell
-        startingCell = pathFinder(grid, startingCell, targetCell, masterList, listOfPaths);
+        // Find the next target, which has the minimum h-cost of all the possible targets. 
+        targetCell = findMinTarget(busCell, masterList[TARGETLIST]);
+
+        // Finds the path to next target and updates the bus so that it is now at that target cell. 
+        busCell = pathFinder(grid, busCell, targetCell, masterList, pathList);
 
         // Passenger pickup routine:
-        if (startingCell->cellData[PASSENGER] == 1)
+        if (busCell->cellData[PASSENGER] == 1)
         {
             // Add the passenger's destination to the target list and add the passenger to the buslist
-            addNode(masterList[TARGETLIST], startingCell->destination);
-            addNode(masterList[PASSONBUS], startingCell);
+            addNode(masterList[TARGETLIST], busCell->destination);
+            addNode(masterList[BUSLIST], busCell);
 
-            // Delete the passenger from the idlelist and delete it from the target list.
-            deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], startingCell));
-            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
+            // Delete the passenger from the target list.
+            // deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], busCell));
+            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], busCell));
+
+            //After picking up a passenger, we update the cell to reflect the passenger being picked up and the bus moving to that new cell.
+            busCell -> cellData[PASSENGER] = FALSE;
+            busCell -> cellData[BUS] = TRUE;
         }
         // Passenger dropoff routine
-        else if (startingCell->cellData[DESTINATION] == 1)
+        else if (busCell->cellData[DESTINATION] == 1)
         {
             // Delete the destination off of the target list and delete the passenger from the bus list .
-            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], startingCell));
-            deleteNode(masterList[PASSONBUS], findNode(masterList[PASSONBUS], startingCell));
+            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], busCell));
+            deleteNode(masterList[BUSLIST], findNode(masterList[BUSLIST], busCell));
+
+            //After dropping off a passenger, we update the cell to reflect the passenger being dropped off and the bus moving to that new cell.
+            busCell -> cellData[DESTINATION] = FALSE;
+            busCell -> cellData[BUS] = TRUE;
         }
+
+        //Update grid routine:
+        printf("Path %d: \n", pathCount + 1);
+        printGrid(grid);
+        displayList(pathList[pathCount]);
+        pathCount++;
+        printf("\n");
     }
 }
 
@@ -43,8 +63,6 @@ Cell *findMinTarget(Cell *start, LinkedList *targetList)
     // 1. a passenger that we haven't picked up
     // 2. a destination of a passenger that we HAVE picked up.
 
-    // realistically, we shouldn't check both lists and instead check the passengers we DONT have, and the destinations of the passengers we have.
-    // TODO for Ethan, figure out a way to take the busList (passengers we have), and create a list with the passengers we don't have, and the destinations of hte passengers that we do have.
     Cell *minTarget = NULL;
     int minHCost;
     Node *traverser = targetList->head;
@@ -69,7 +87,7 @@ Cell *findMinTarget(Cell *start, LinkedList *targetList)
 }
 
 // finds a path to a target node, returns the new starting node.
-Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *listOfPaths[35])
+Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35])
 {
 
     // Initialize openSet
@@ -91,7 +109,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
         // if the coordinates match between the current node and the target node, we have a match!
         if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
         {
-            retracePath(startNode, currentNode, masterList, listOfPaths);
+            retracePath(startNode, currentNode, masterList, pathList);
             return currentNode;
         }
 
@@ -130,30 +148,33 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
             }
         }
     }
-    return NULL;
+    // free(openSet);
+    // free(closedSet);
+    printf("Null pathh from start. Likely boxed in \n");
+    return EXIT_FAILURE;
 }
 
 void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35])
 {
 
     Cell *currentCell = endCell;
-    // printf("Starting Cell: [%d][%d] \n", startCell ->coordinates[0], startCell ->coordinates[1]);
-    int i = 0;
-    while (pathList[i] != NULL)
-        i++; // find an empty path within the path list.
-    pathList[i] = createLinkedList();
+
+    // int i = 0;
+    // while (pathList[i] != NULL)
+    //     i++; // find an empty path within the path list.
+    pathList[pathCount] = createLinkedList();
 
     // Create a templist with all the parents of the nodes. Head -> endNode
     while (currentCell != startCell)
     {
-        addNode(pathList[i], currentCell);
+        addNode(pathList[pathCount], currentCell);
         currentCell = currentCell->parent;
     }
 
-    addNode(pathList[i], currentCell);
+    addNode(pathList[pathCount], currentCell);
 
     // Reverse path now because it's in opposite order.
-    reverseList(pathList[i]);
+    reverseList(pathList[pathCount]);
 }
 
 void reverseList(LinkedList *list)
