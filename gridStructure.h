@@ -5,7 +5,7 @@
 #define GRID_SIZE 10
 
 // cellData indices.
-typedef enum CellData {
+enum CellData {
     OPEN, CONSTRUCTION, PASSENGER, DESTINATION, BUS
 };
 

@@ -2,9 +2,9 @@
 #include "gridStructure.h"
 
 #define CONSTRUCTION_POINTS 30
-#define PASSENGER_COUNT 5 //used for random passenger-destination creation
-#define VERBOSE 0
-#define RANDOM 0
+#define PASSENGER_COUNT 5 // used for random passenger-destination creation
+#define VERBOSE 0         // for debugging
+#define RANDOM 0          // set to 1 if you want random passenger-destination pairs.
 
 enum EXIT
 {
@@ -35,8 +35,15 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
             grid[i][j]->cellData[CONSTRUCTION] = FALSE;
             grid[i][j]->cellData[PASSENGER] = FALSE;
             grid[i][j]->cellData[DESTINATION] = FALSE;
-            grid[i][j]->cellData[BUS] = FALSE;
-            if (i == 0 && j == 0) grid[i][j]->cellData[BUS] = TRUE;
+            if (i == 0 && j == 0)
+            {
+                grid[i][j]->cellData[BUS] = TRUE;
+                grid[i][j]->cellData[OPEN] = FALSE;
+            }
+            else
+            {
+                grid[i][j]->cellData[BUS] = FALSE;
+            }
         }
     }
 
@@ -85,7 +92,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
         else if (input == 2)
         {
             // check first that the lists aren't empty before exiting.
-            if (masterList[IDLEPASS] -> count == 0)
+            if (masterList[IDLEPASS]->count == 0)
             {
                 printf("Oops! You silly billy, you didn't input a passenger-destination pair. Please do so now. \n");
             }
@@ -100,7 +107,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
             printf("Oops! You silly billy, that's an invalid input \n");
         }
 
-    } while (go_next == FALSE); 
+    } while (go_next == FALSE);
 
     return;
 }
@@ -219,9 +226,11 @@ void printGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
             if (grid[i][j]->cellData[CONSTRUCTION] == TRUE)
                 printf("1");
             if (grid[i][j]->cellData[PASSENGER] == TRUE)
-                printf("p");
+                printf("P");
             if (grid[i][j]->cellData[DESTINATION] == TRUE)
-                printf("d");
+                printf("D");
+            if (grid[i][j]->cellData[BUS] == TRUE)
+                printf("B");
         }
         printf("\n");
     }
