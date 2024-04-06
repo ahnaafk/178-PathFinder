@@ -5,10 +5,10 @@
 #define GRID_SIZE 10
 
 // cellData indices.
-#define OPEN 0
-#define CONSTRUCTION 1
-#define PASSENGER 2
-#define DESTINATION 3
+enum CellData {
+    OPEN, CONSTRUCTION, PASSENGER, DESTINATION, BUS
+};
+
 #define FALSE 0
 #define TRUE 1
 
@@ -29,6 +29,8 @@ Cell *createPassenger(Cell *grid[GRID_SIZE][GRID_SIZE]);
 Cell *createDestination(Cell *grid[GRID_SIZE][GRID_SIZE]);
 
 int neighbourChecker(Cell *grid[GRID_SIZE][GRID_SIZE],int idx[2]);
+
+int isValid(Cell *grid[GRID_SIZE][GRID_SIZE], int x, int y);
 
 // TODO: Create a passenger pickup function which frees the pointer to the passenger.
 // TODO: Create a clear destination function which frees the pointer to the destination
