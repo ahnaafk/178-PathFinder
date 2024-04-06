@@ -4,7 +4,7 @@
 
 Cell *findMinTarget(Cell *start, LinkedList *targetList);
 
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35]);
+int astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35]);
 
 Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35]);
 

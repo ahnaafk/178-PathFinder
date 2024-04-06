@@ -3,7 +3,7 @@
 int pathCount = 0; 
 
 // Finds min target from starting cell, finds shortest path from starting
-void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
+int astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
 {
     Cell *busCell = start;
     Cell *targetCell;
@@ -19,6 +19,7 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList
 
         // Finds the path to next target and updates the bus so that it is now at that target cell. 
         busCell = pathFinder(grid, busCell, targetCell, masterList, pathList);
+        if (busCell == NULL) return EXIT_FAILURE;
 
         // Passenger pickup routine:
         if (busCell->cellData[PASSENGER] == 1)
@@ -54,6 +55,7 @@ void astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList
         pathCount++;
         printf("\n");
     }
+    return EXIT_SUCCESS;
 }
 
 Cell *findMinTarget(Cell *start, LinkedList *targetList)
@@ -151,7 +153,7 @@ Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *target
     // free(openSet);
     // free(closedSet);
     printf("Null pathh from start. Likely boxed in \n");
-    return EXIT_FAILURE;
+    return NULL;
 }
 
 void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35])

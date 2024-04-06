@@ -15,17 +15,24 @@ int main()
     masterList[BUSLIST] = createLinkedList();
     masterList[TARGETLIST] = createLinkedList();
 
-    // Creates List of all successful paths taken. maximum 35 paths to be taken. since there are only 70 free spots on the grid. 
+    // Creates List of all successful paths taken. maximum 35 paths to be taken. since there are only 70 free spots on the grid.
     LinkedList *pathList[34];
 
     createGrid(grid, masterList);
     printf("Initial grid: \n");
     printGrid(grid);
 
-    astar(grid, grid[0][0], masterList, pathList);
+    int status = astar(grid, grid[0][0], masterList, pathList);
 
-    printf("No more passengers to drop off! We are done here. \n");
-    
+    if (status == EXIT_FAILURE)
+    {
+        printf("Failed");
+    }
+    else
+    {
+
+        printf("No more passengers to drop off! We are done here. \n");
+    }
 
     for (int i = 0; i < GRID_SIZE; i++)
     {
