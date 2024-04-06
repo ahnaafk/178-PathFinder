@@ -5,10 +5,10 @@
 #define GRID_SIZE 10
 
 // cellData indices.
-#define OPEN 0
-#define CONSTRUCTION 1
-#define PASSENGER 2
-#define DESTINATION 3
+typedef enum CellData {
+    OPEN, CONSTRUCTION, PASSENGER, DESTINATION, BUS
+};
+
 #define FALSE 0
 #define TRUE 1
 

@@ -7,12 +7,13 @@
 typedef struct cell
 {
     int coordinates[2];
-    int cellData[4];
+    int cellData[5];
     // one-hot encoded array where 0 is false, and 1 is true.
     //[0]: 1 if open, 0 if not.
     //[1]: 1 if construction, 0 if not.
     //[2]: 1 if passenger, 0 if not.
     //[3]: 1 if destination, 0 if not.
+    //[4] 1 if bus, 0 if not. 
     struct cell *passenger;
     struct cell *destination;
     struct cell *parent;
