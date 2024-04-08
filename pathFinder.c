@@ -160,10 +160,6 @@ void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], Link
 {
 
     Cell *currentCell = endCell;
-
-    // int i = 0;
-    // while (pathList[i] != NULL)
-    //     i++; // find an empty path within the path list.
     pathList[pathCount] = createLinkedList();
 
     // Create a templist with all the parents of the nodes. Head -> endNode
