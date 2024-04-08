@@ -137,7 +137,7 @@ Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode,
 
                     // TODO: verify this logic
                     // TODO create the isOpen function once linked list is created.
-                    if (gCost(currentNode, neighbour) < neighbour->g_cost || !inOpen(openSet, neighbour))
+                    if (gCost(startNode, neighbour) < neighbour->g_cost || !inOpen(openSet, neighbour))
                     {
                         neighbour->f_cost = fCost(startNode, targetNode, neighbour);
                         neighbour->g_cost = gCost(startNode, neighbour);

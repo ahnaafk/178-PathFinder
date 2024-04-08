@@ -42,4 +42,3 @@ void addNode(LinkedList *list, Cell *data);
 int deleteNode(LinkedList *list, Node *data);
 Node *findNode(LinkedList *list, Cell *cell);
 void displayList(LinkedList *list);
-void destroyList(LinkedList *list);

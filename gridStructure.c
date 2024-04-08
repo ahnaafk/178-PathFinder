@@ -3,8 +3,8 @@
 
 #define CONSTRUCTION_POINTS 30
 #define PASSENGER_COUNT 5 // used for random passenger-destination creation
-#define VERBOSE 0         // for debugging
-#define RANDOM 0          // set to 1 if you want random passenger-destination pairs.
+#define VERBOSE 1         // for debugging
+#define RANDOM 1          // set to 1 if you want random passenger-destination pairs.
 
 enum EXIT
 {
@@ -58,16 +58,23 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
     {
         for (int i = 0; i < PASSENGER_COUNT; i++)
         {
-        Cell *pass = createPassenger(grid);
+            Cell *pass = createPassenger(grid);
 
-        // each passenger on the grid is a valid target.
-        addNode(masterList[TARGETLIST], pass);
+            // each passenger on the grid is a valid target.
+            addNode(masterList[TARGETLIST], pass);
 
-        Cell *dest = createDestination(grid);
+            Cell *dest = createDestination(grid);
 
-        // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
-        pass->destination = dest;
-        dest->passenger = pass;
+            // point each pair to each other so that the algorithm always knows the where corresponding element in the pair is.
+            pass->destination = dest;
+            dest->passenger = pass;
+
+            // set verbose to true when debugging.
+            if (VERBOSE == TRUE)
+            {
+                printf("destination: [%d][%d] \n", dest->coordinates[0], dest->coordinates[1]);
+                printf("passenger: [%d][%d] \n", pass->coordinates[0], pass->coordinates[1]);
+            }
         }
     }
     else
@@ -238,9 +245,9 @@ void printGrid(Cell *grid[GRID_SIZE][GRID_SIZE])
         for (int j = 0; j < GRID_SIZE; j++)
         {
             if (grid[i][j]->cellData[OPEN] == TRUE)
-                printf("0");
+                printf("_");
             if (grid[i][j]->cellData[CONSTRUCTION] == TRUE)
-                printf("1");
+                printf("X");
             if (grid[i][j]->cellData[PASSENGER] == TRUE)
                 printf("P");
             if (grid[i][j]->cellData[DESTINATION] == TRUE)
