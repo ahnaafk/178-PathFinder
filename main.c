@@ -22,7 +22,7 @@ int main()
     printf("Initial grid: \n");
     printGrid(grid);
 
-    int status = astar(grid, grid[0][0], masterList, pathList);
+    int status = pathFinder(grid, grid[0][0], masterList, pathList);
 
     if (status == EXIT_FAILURE)
     {

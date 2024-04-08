@@ -3,7 +3,7 @@
 int pathCount = 0; 
 
 // Finds min target from starting cell, finds shortest path from starting
-int astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
+int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
 {
     Cell *busCell = start;
     Cell *targetCell;
@@ -18,7 +18,7 @@ int astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[
         targetCell = findMinTarget(busCell, masterList[TARGETLIST]);
 
         // Finds the path to next target and updates the bus so that it is now at that target cell. 
-        busCell = pathFinder(grid, busCell, targetCell, masterList, pathList);
+        busCell = astar(grid, busCell, targetCell, masterList, pathList);
         if (busCell == NULL) return EXIT_FAILURE;
 
         // Passenger pickup routine:
@@ -89,7 +89,7 @@ Cell *findMinTarget(Cell *start, LinkedList *targetList)
 }
 
 // finds a path to a target node, returns the new starting node.
-Cell *pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35])
+Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35])
 {
 
     // Initialize openSet
