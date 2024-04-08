@@ -14,7 +14,7 @@ enum CellData {
 
 void generateRandomIndex(int *array, Cell *grid[GRID_SIZE][GRID_SIZE]);
 
-void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5]);
+void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *targetList);
 
 // helper debug functions
 void printGrid(Cell *grid[GRID_SIZE][GRID_SIZE]);

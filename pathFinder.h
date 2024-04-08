@@ -4,11 +4,11 @@
 
 Cell *findMinTarget(Cell *start, LinkedList *targetList);
 
-int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35]);
+int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *targetList, LinkedList *pathList[35]);
 
-Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35]);
+Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *targetList, LinkedList *pathList[35]);
 
-void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35]);
+void retracePath(Cell *startCell, Cell *endCell, LinkedList *pathList[35]);
 
 void reverseList(LinkedList *list);
 

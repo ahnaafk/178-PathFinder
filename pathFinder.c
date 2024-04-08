@@ -3,34 +3,33 @@
 int pathCount = 0; 
 
 // Finds min target from starting cell, finds shortest path from starting
-int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *masterList[4], LinkedList *pathList[35])
+int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *targetList, LinkedList *pathList[35])
 {
     Cell *busCell = start;
     Cell *targetCell;
     // Loop while targets are still available
-    while (masterList[TARGETLIST]->head != NULL)
+    while (targetList->head != NULL)
     {
         //Set the current cell where the bus is to an open space since it'll move to its new destination.
         busCell -> cellData[BUS] = FALSE;
         busCell -> cellData[OPEN] = TRUE;
 
         // Find the next target, which has the minimum h-cost of all the possible targets. 
-        targetCell = findMinTarget(busCell, masterList[TARGETLIST]);
+        targetCell = findMinTarget(busCell, targetList);
 
         // Finds the path to next target and updates the bus so that it is now at that target cell. 
-        busCell = astar(grid, busCell, targetCell, masterList, pathList);
+        busCell = astar(grid, busCell, targetCell, targetList, pathList);
         if (busCell == NULL) return EXIT_FAILURE;
 
         // Passenger pickup routine:
         if (busCell->cellData[PASSENGER] == 1)
         {
-            // Add the passenger's destination to the target list and add the passenger to the buslist
-            addNode(masterList[TARGETLIST], busCell->destination);
-            addNode(masterList[BUSLIST], busCell);
+            // Add the passenger's destination to the target list
+            addNode(targetList, busCell->destination);
 
             // Delete the passenger from the target list.
             // deleteNode(masterList[IDLEPASS], findNode(masterList[IDLEPASS], busCell));
-            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], busCell));
+            deleteNode(targetList, findNode(targetList, busCell));
 
             //After picking up a passenger, we update the cell to reflect the passenger being picked up and the bus moving to that new cell.
             busCell -> cellData[PASSENGER] = FALSE;
@@ -39,9 +38,8 @@ int pathFinder(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *start, LinkedList *master
         // Passenger dropoff routine
         else if (busCell->cellData[DESTINATION] == 1)
         {
-            // Delete the destination off of the target list and delete the passenger from the bus list .
-            deleteNode(masterList[TARGETLIST], findNode(masterList[TARGETLIST], busCell));
-            deleteNode(masterList[BUSLIST], findNode(masterList[BUSLIST], busCell));
+            // Delete the destination off of the target list
+            deleteNode(targetList, findNode(targetList, busCell));
 
             //After dropping off a passenger, we update the cell to reflect the passenger being dropped off and the bus moving to that new cell.
             busCell -> cellData[DESTINATION] = FALSE;
@@ -89,7 +87,7 @@ Cell *findMinTarget(Cell *start, LinkedList *targetList)
 }
 
 // finds a path to a target node, returns the new starting node.
-Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *masterList[4], LinkedList *pathList[35])
+Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode, LinkedList *targetList, LinkedList *pathList[35])
 {
 
     // Initialize openSet
@@ -111,7 +109,7 @@ Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode,
         // if the coordinates match between the current node and the target node, we have a match!
         if (currentNode->coordinates[0] == targetNode->coordinates[0] && currentNode->coordinates[1] == targetNode->coordinates[1])
         {
-            retracePath(startNode, currentNode, masterList, pathList);
+            retracePath(startNode, currentNode, pathList);
             return currentNode;
         }
 
@@ -156,7 +154,7 @@ Cell *astar(Cell *grid[GRID_SIZE][GRID_SIZE], Cell *startNode, Cell *targetNode,
     return NULL;
 }
 
-void retracePath(Cell *startCell, Cell *endCell, LinkedList *masterList[4], LinkedList *pathList[35])
+void retracePath(Cell *startCell, Cell *endCell, LinkedList *pathList[35])
 {
 
     Cell *currentCell = endCell;

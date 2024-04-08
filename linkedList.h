@@ -1,7 +1,4 @@
-enum masterlist {
-    BUSLIST,
-    TARGETLIST,
-};
+
 
 // Define the structure for the node in the linked list
 typedef struct cell

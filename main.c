@@ -9,20 +9,17 @@ int main()
 
     Cell *grid[GRID_SIZE][GRID_SIZE];
 
-    // Creates List of Lists
-    LinkedList *masterList[2];
+    // Creates list of all targets
+    LinkedList *targetList = createLinkedList();
 
-    masterList[BUSLIST] = createLinkedList();
-    masterList[TARGETLIST] = createLinkedList();
-
-    // Creates List of all successful paths taken. maximum 35 paths to be taken. since there are only 70 free spots on the grid.
+    // Creates list of all successful paths taken. maximum 35 paths to be taken. since there are only 70 free spots on the grid.
     LinkedList *pathList[34];
 
-    createGrid(grid, masterList);
+    createGrid(grid, targetList);
     printf("Initial grid: \n");
     printGrid(grid);
 
-    int status = pathFinder(grid, grid[0][0], masterList, pathList);
+    int status = pathFinder(grid, grid[0][0], targetList, pathList);
 
     if (status == EXIT_FAILURE)
     {
@@ -43,8 +40,7 @@ int main()
         }
     }
 
-    free(masterList[TARGETLIST]);
-    free(masterList[BUSLIST]);
+    free(targetList);
 
     return 0;
 }

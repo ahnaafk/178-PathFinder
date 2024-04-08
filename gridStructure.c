@@ -12,7 +12,7 @@ enum EXIT
     EXIT_ERR
 };
 
-void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
+void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *targetList)
 {
     // initalize each part of the grid to an open space by default
 
@@ -61,7 +61,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
             Cell *pass = createPassenger(grid);
 
             // each passenger on the grid is a valid target.
-            addNode(masterList[TARGETLIST], pass);
+            addNode(targetList, pass);
 
             Cell *dest = createDestination(grid);
 
@@ -83,7 +83,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
         int go_next = FALSE;
         do
         {
-            printf("There are/is currently %d passenger-destination pair(s) \n", masterList[TARGETLIST]->count);
+            printf("There are/is currently %d passenger-destination pair(s) \n", targetList->count);
             printf("Please input 1 to create a passenger-destination pair, or 2 to continue to pathfinding: ");
             scanf("%d", &input);
 
@@ -92,7 +92,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
                 Cell *pass = createPassenger(grid);
 
                 // each passenger on the grid is a valid target.
-                addNode(masterList[TARGETLIST], pass);
+                addNode(targetList, pass);
 
                 Cell *dest = createDestination(grid);
 
@@ -114,7 +114,7 @@ void createGrid(Cell *grid[GRID_SIZE][GRID_SIZE], LinkedList *masterList[5])
             else if (input == 2)
             {
                 // check first that the lists aren't empty before exiting.
-                if (masterList[TARGETLIST]->count == 0)
+                if (targetList->count == 0)
                 {
                     printf("Oops! You silly billy, you didn't input a passenger-destination pair. Please do so now. \n");
                 }
